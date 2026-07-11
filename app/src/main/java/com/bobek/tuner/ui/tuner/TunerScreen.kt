@@ -94,7 +94,7 @@ fun TunerScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.metronome)) },
+                title = { Text(stringResource(R.string.tuner)) },
                 actions = {
                     IconButton(onClick = onSettingsClick) {
                         Icon(
@@ -109,7 +109,11 @@ fun TunerScreen(
 
             val cents: Int? = (state as? TunerState.Listening)?.note?.cents
 
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .padding(padding)
+                    .fillMaxSize()
+            ) {
                 Box(
                     modifier = Modifier
                         .weight(1f)

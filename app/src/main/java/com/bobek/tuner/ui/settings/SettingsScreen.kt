@@ -72,7 +72,6 @@ fun SettingsScreen(
     val context = LocalContext.current
     val nightMode by viewModel.getNightModeFlow().collectAsState()
 
-    var showSoundDialog by rememberSaveable { mutableStateOf(false) }
     var showNightModeDialog by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
@@ -141,7 +140,7 @@ fun SettingsScreen(
                     headlineContent = { Text(stringResource(R.string.source_code)) },
                     supportingContent = { Text(stringResource(R.string.source_code_name)) },
                     modifier = Modifier.clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Kr0oked/Metronome".toUri())
+                        val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Kr0oked/Tuner".toUri())
                         context.startActivitySafely(intent)
                     }
                 )

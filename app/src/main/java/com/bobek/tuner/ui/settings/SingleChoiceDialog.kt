@@ -18,7 +18,6 @@
 
 package com.bobek.tuner.ui.settings
 
-import android.R
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -89,7 +88,7 @@ fun <T : PreferenceChoice> SingleChoiceDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.cancel))
+                Text(stringResource(android.R.string.cancel))
             }
         }
     )

@@ -39,19 +39,38 @@ Google Play deployment additionally requires `ANDROID_JSON_KEY_FILE`.
 
 ## Architecture
 
-TODO
+The app follows MVVM in a single-Activity Compose setup with audio capture running on a background coroutine:
+
+- **`TunerApplication`** — Hilt entry point
+- **`MainActivity`** — Single Compose activity; hosts `AppViewModel` and `TunerViewModel`
+- **`AppViewModel`** — Night mode preference via `StateFlow`; reads from `SettingsRepository`
+- **`TunerViewModel`** — All tuner state via `StateFlow`; manages `AudioRecord` session on an IO coroutine; keeps screen
+  on while listening; loaded from `SettingsRepository` on init
 
 ### Key Packages
 
-TODO
+| Package     | Responsibility                                                                                                                                       |
+|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `domain/`   | `PitchDetector` — YIN algorithm (de Cheveigné & Kawahara, 2002) at 44.1kHz PCM FLOAT; `DetectedNote` — note name, octave, frequency, cents deviation |
+| `data/`     | `AppNightMode`, `PreferenceChoice` — immutable preference models                                                                                     |
+| `settings/` | `DataStoreSettingsRepository` — persists preferences via Jetpack DataStore; injected via Hilt                                                        |
+| `ui/`       | Jetpack Compose screens: `tuner/`, `settings/`, `licenses/`, `theme/`                                                                                |
 
 ### Data Flow
 
-TODO
+Microphone → `AudioRecord` (IO coroutine in `TunerViewModel`) → `PitchDetector` (YIN) → `FrequencySmoothing` (EMA) →
+`NoteConfirmationGate` (3-frame debounce) → `TunerState` `StateFlow` → `TunerScreen`
+
+Settings changes are debounced 1 second before being written to DataStore.
 
 ## Tech Stack
 
-TODO
+- **UI:** Jetpack Compose + Material3, Navigation Compose
+- **DI:** Hilt + KSP
+- **Persistence:** DataStore Preferences
+- **Audio:** Android `AudioRecord` (PCM FLOAT, 44.1kHz), YIN pitch detection
+- **Build:** AGP 9.x, Kotlin 2.x, Java 11 toolchain
+- **Testing:** JUnit4, Compose UI Test, kotlinx-coroutines-test, Fastlane Screengrab
 
 ## Branch Notes
 

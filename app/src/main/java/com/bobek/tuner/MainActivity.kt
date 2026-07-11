@@ -28,8 +28,6 @@ import com.bobek.tuner.ui.MainContent
 import com.bobek.tuner.ui.tuner.TunerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-private const val TAG = "MainActivity"
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 

@@ -20,8 +20,11 @@ package com.bobek.tuner.ui
 
 import android.content.res.Resources
 import android.net.Uri
+import android.view.WindowManager
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
@@ -40,6 +43,7 @@ import com.bobek.tuner.ui.theme.AppTheme
 import com.bobek.tuner.ui.tuner.ComposeTunerViewModel
 import com.bobek.tuner.ui.tuner.ITunerViewModel
 import com.bobek.tuner.ui.tuner.TunerScreen
+import com.bobek.tuner.ui.tuner.TunerState
 import de.philipp_bobek.oss_licenses_parser.OssLicensesParser
 import de.philipp_bobek.oss_licenses_parser.ThirdPartyLicenseMetadata
 import kotlinx.coroutines.Dispatchers
@@ -57,11 +61,20 @@ fun MainContent(
 ) {
     val navController = rememberNavController()
     val nightMode by appViewModel.getNightModeFlow().collectAsState()
+    val tunerState by tunerViewModel.getTunerStateFlow().collectAsState()
 
     val isDarkTheme = when (nightMode) {
         AppNightMode.NO -> false
         AppNightMode.YES -> true
         AppNightMode.FOLLOW_SYSTEM -> isSystemInDarkTheme()
+    }
+
+    val activity = LocalActivity.current
+    LaunchedEffect(tunerState) {
+        when (tunerState) {
+            is TunerState.Listening -> activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            is TunerState.Idle -> activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        }
     }
 
     AppTheme(darkTheme = isDarkTheme) {
