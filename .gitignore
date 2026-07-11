@@ -1,0 +1,14 @@
+### Android ###
+/local.properties
+/captures
+.externalNativeBuild
+
+### Gradle ###
+.gradle
+/build
+
+### JetBrains IDEs ###
+*.iml
+
+### Fastlane ###
+fastlane/report.xml

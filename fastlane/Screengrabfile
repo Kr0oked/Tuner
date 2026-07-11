@@ -1,0 +1,12 @@
+app_package_name('com.bobek.tuner')
+use_tests_in_packages(['com.bobek.tuner.screengrab'])
+
+app_apk_path('app/build/outputs/apk/debug/app-debug.apk')
+tests_apk_path('app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk')
+
+locales([
+  'de-DE',
+  'en-US'
+])
+
+use_timestamp_suffix(false)

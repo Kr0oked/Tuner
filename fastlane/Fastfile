@@ -1,0 +1,85 @@
+default_platform(:android)
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+    gradle(task: "connectedAndroidTest")
+  end
+
+  desc "Build a new APK"
+  lane :apk do
+    gradle(task: "clean")
+    gradle(
+      task: "assembleRelease",
+      print_command: false,
+      properties: {
+        "android.injected.signing.store.file" => ENV["KEYSTORE_FILE"],
+        "android.injected.signing.store.password" => ENV["KEYSTORE_PASSWORD"],
+        "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
+        "android.injected.signing.key.password" => ENV["KEY_PASSWORD"],
+      }
+    )
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "clean")
+    gradle(
+      task: "bundleRelease",
+      print_command: false,
+      properties: {
+        "android.injected.signing.store.file" => ENV["KEYSTORE_FILE"],
+        "android.injected.signing.store.password" => ENV["KEYSTORE_PASSWORD"],
+        "android.injected.signing.key.alias" => ENV["KEY_ALIAS"],
+        "android.injected.signing.key.password" => ENV["KEY_PASSWORD"],
+      }
+    )
+    upload_to_play_store(
+      json_key: ENV["ANDROID_JSON_KEY_FILE"]
+    )
+  end
+
+  desc "Grab phone screenshot 1"
+  lane :grab_screen_phone_1 do
+   gradle(task: 'assemble', build_type: 'Debug')
+   gradle(task: 'assemble', build_type: 'AndroidTest')
+   screengrab(launch_arguments: ['screenshotName 1'], device_type: 'phone', clear_previous_screenshots: true)
+  end
+
+  desc "Grab phone screenshot 2"
+  lane :grab_screen_phone_2 do
+   gradle(task: 'assemble', build_type: 'Debug')
+   gradle(task: 'assemble', build_type: 'AndroidTest')
+   screengrab(launch_arguments: ['screenshotName 2'], device_type: 'phone')
+  end
+
+  desc "Grab seven inch screenshot 1"
+  lane :grab_screen_seven_inch_1 do
+   gradle(task: 'assemble', build_type: 'Debug')
+   gradle(task: 'assemble', build_type: 'AndroidTest')
+   screengrab(launch_arguments: ['screenshotName 1'], device_type: 'sevenInch', clear_previous_screenshots: true)
+  end
+
+  desc "Grab seven inch screenshot 2"
+  lane :grab_screen_seven_inch_2 do
+   gradle(task: 'assemble', build_type: 'Debug')
+   gradle(task: 'assemble', build_type: 'AndroidTest')
+   screengrab(launch_arguments: ['screenshotName 2'], device_type: 'sevenInch')
+  end
+
+  desc "Grab ten inch screenshot 1"
+  lane :grab_screen_ten_inch_1 do
+   gradle(task: 'assemble', build_type: 'Debug')
+   gradle(task: 'assemble', build_type: 'AndroidTest')
+   screengrab(launch_arguments: ['screenshotName 1'], device_type: 'tenInch', clear_previous_screenshots: true)
+  end
+
+  desc "Grab ten inch screenshot 2"
+  lane :grab_screen_ten_inch_2 do
+   gradle(task: 'assemble', build_type: 'Debug')
+   gradle(task: 'assemble', build_type: 'AndroidTest')
+   screengrab(launch_arguments: ['screenshotName 2'], device_type: 'tenInch')
+  end
+
+end
