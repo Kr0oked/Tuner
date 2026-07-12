@@ -18,7 +18,6 @@
 
 package com.bobek.tuner.ui
 
-import android.content.res.Resources
 import android.net.Uri
 import android.view.WindowManager
 import androidx.activity.compose.LocalActivity
@@ -29,14 +28,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.bobek.tuner.R
 import com.bobek.tuner.data.AppNightMode
-import com.bobek.tuner.ui.licenses.ThirdPartyLicenseScreen
-import com.bobek.tuner.ui.licenses.ThirdPartyLicenseScreenState
+import com.bobek.tuner.licenses.LicenseRepository
+import com.bobek.tuner.ui.licenses.LicenseScreen
+import com.bobek.tuner.ui.licenses.LicenseScreenState
 import com.bobek.tuner.ui.licenses.ThirdPartyLicensesScreen
 import com.bobek.tuner.ui.settings.SettingsScreen
 import com.bobek.tuner.ui.theme.AppTheme
@@ -44,14 +45,8 @@ import com.bobek.tuner.ui.tuner.ComposeTunerViewModel
 import com.bobek.tuner.ui.tuner.ITunerViewModel
 import com.bobek.tuner.ui.tuner.TunerScreen
 import com.bobek.tuner.ui.tuner.TunerState
-import de.philipp_bobek.oss_licenses_parser.OssLicensesParser
-import de.philipp_bobek.oss_licenses_parser.ThirdPartyLicenseMetadata
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-
-private val MANUAL_LICENSE_RESOURCES = mapOf(
-    "Material Symbols" to R.raw.license_apache_2_0
-)
 
 @Composable
 @PreviewScreenSizes
@@ -89,14 +84,31 @@ fun MainContent(
                 SettingsScreen(
                     viewModel = appViewModel,
                     onBackClick = { navController.popBackStack() },
+                    onLicenseClick = { navController.navigate("license") },
                     onThirdPartyLicensesClick = { navController.navigate("licenses") }
+                )
+            }
+            composable("license") {
+                val resources = LocalResources.current
+                val licenseContent by produceState(initialValue = "") {
+                    value = withContext(Dispatchers.IO) {
+                        LicenseRepository.getAppLicenseContent(resources)
+                    }
+                }
+
+                LicenseScreen(
+                    state = LicenseScreenState(
+                        title = stringResource(R.string.license_name),
+                        licenseContent = licenseContent,
+                    ),
+                    onBackClick = { navController.popBackStack() }
                 )
             }
             composable("licenses") {
                 val resources = LocalResources.current
                 val libraryNames by produceState(initialValue = emptyList()) {
                     value = withContext(Dispatchers.IO) {
-                        getLibraryNames(resources)
+                        LicenseRepository.getThirdPartyLibraryNames(resources)
                     }
                 }
 
@@ -113,13 +125,13 @@ fun MainContent(
                 val resources = LocalResources.current
                 val licenseContent by produceState(initialValue = "", key1 = libraryName) {
                     value = withContext(Dispatchers.IO) {
-                        getLicenseContent(resources, libraryName)
+                        LicenseRepository.getThirdPartyLicenseContent(resources, libraryName)
                     }
                 }
 
-                ThirdPartyLicenseScreen(
-                    state = ThirdPartyLicenseScreenState(
-                        libraryName = libraryName,
+                LicenseScreen(
+                    state = LicenseScreenState(
+                        title = libraryName,
                         licenseContent = licenseContent,
                     ),
                     onBackClick = { navController.popBackStack() }
@@ -128,33 +140,3 @@ fun MainContent(
         }
     }
 }
-
-private fun getLibraryNames(resources: Resources): List<String> {
-    val ossLicenseNames = resources
-        .openRawResource(R.raw.third_party_license_metadata)
-        .use(OssLicensesParser::parseMetadata)
-        .map { it.libraryName }
-
-    return (ossLicenseNames + MANUAL_LICENSE_RESOURCES.keys).sorted()
-}
-
-private fun getLicenseContent(resources: Resources, libraryName: String): String {
-    val manualResourceId = MANUAL_LICENSE_RESOURCES[libraryName]
-
-    return if (manualResourceId != null) {
-        resources.openRawResource(manualResourceId).bufferedReader().readText()
-    } else {
-        resources
-            .openRawResource(R.raw.third_party_license_metadata)
-            .use(OssLicensesParser::parseMetadata)
-            .find { it.libraryName == libraryName }
-            ?.let { getLicenseContent(resources, it) }
-            ?: ""
-    }
-}
-
-private fun getLicenseContent(resources: Resources, metadata: ThirdPartyLicenseMetadata): String =
-    resources
-        .openRawResource(R.raw.third_party_licenses)
-        .use { OssLicensesParser.parseLicense(metadata, it) }
-        .licenseContent
