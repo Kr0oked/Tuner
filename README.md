@@ -22,7 +22,8 @@ height="80">](https://github.com/Kr0oked/Tuner/releases/latest)
 
 ## Features
 
-* TODO
+* Chromatic tuner with automatic note detection
+* Precise pitch detection down to the cent
 * Light and Dark theme
 * No advertisements
 * No trackers

@@ -2,7 +2,8 @@ Du bekommst genau das was du erwartest.
 Ein einfaches und schönes Stimmgerät.
 
 Inhalt:
-* TODO
+* Chromatisches Stimmgerät mit automatischer Tonerkennung
+* Präzise Tonhöhenerkennung auf das Cent genau
 * Light und Dark Theme
 * Keine Werbung
 * Keine Tracker

@@ -2,7 +2,8 @@ You’ll get exactly what you expect.
 A simple and beautiful tuner.
 
 Features:
-* TODO
+* Chromatic tuner with automatic note detection
+* Precise pitch detection down to the cent
 * Light and Dark theme
 * No advertisements
 * No trackers
