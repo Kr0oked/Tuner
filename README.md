@@ -4,9 +4,10 @@
 
 # Tuner
 
-### Simple and beautiful tuner for Android
+### A simple and precise tuner for Android
 
-This project is intended to offer a simple and good-looking tuner for Android.
+Tuner listens through your microphone and shows in real time how close each note is,
+with a clean interface and no distractions.
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
 alt="Get it on F-Droid"
@@ -24,10 +25,10 @@ height="80">](https://github.com/Kr0oked/Tuner/releases/latest)
 
 * Chromatic tuner with automatic note detection
 * Precise pitch detection down to the cent
-* Light and Dark theme
+* Light and dark theme
 * No advertisements
 * No trackers
-* No annoyance
+* No unnecessary permissions
 
 ## Screenshots
 
@@ -36,5 +37,5 @@ height="80">](https://github.com/Kr0oked/Tuner/releases/latest)
 
 ## License
 
-The project is licensed under the GNU GPL v3.
-You can find the license text in the [LICENSE](LICENSE) file.
+This project is licensed under the GNU GPL v3.
+See the [LICENSE](LICENSE) file for the full license text.

@@ -1,5 +1,5 @@
-You’ll get exactly what you expect.
-A simple and beautiful tuner.
+Tuner listens through your microphone and shows in real time how close each note is,
+with a clean interface and no distractions.
 
 Features:
 * Chromatic tuner with automatic note detection
@@ -7,6 +7,6 @@ Features:
 * Light and Dark theme
 * No advertisements
 * No trackers
-* No annoyance
+* No unnecessary permissions
 
 Have fun!

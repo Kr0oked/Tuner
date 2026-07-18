@@ -1,1 +1,1 @@
-Simple and beautiful tuner
+A simple and precise tuner
