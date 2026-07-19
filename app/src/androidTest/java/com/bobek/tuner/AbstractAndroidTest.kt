@@ -18,19 +18,78 @@
 
 package com.bobek.tuner
 
-import android.Manifest
+import androidx.annotation.StringRes
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
 import org.junit.Rule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
+@OptIn(ExperimentalTestApi::class)
 abstract class AbstractAndroidTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-    @get:Rule
-    var permissionRule: GrantPermissionRule = GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS)
+    protected fun openSettings() {
+        composeTestRule.waitForIdle()
+        onSettingsButton().performClick()
+        composeTestRule.waitForIdle()
+    }
+
+    protected fun selectNightMode(@StringRes labelResId: Int) {
+        composeTestRule.waitForIdle()
+        onNightModeListItem().performClick()
+        composeTestRule.waitForIdle()
+        onNightModeOption(labelResId).performClick()
+        composeTestRule.waitForIdle()
+    }
+
+    protected fun onTopBarTitle(@StringRes titleResId: Int = R.string.tuner): SemanticsNodeInteraction =
+        onTopBarTitle(getString(titleResId))
+
+    protected fun onTopBarTitle(title: String): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(title)
+
+    protected fun onSettingsButton(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithContentDescription(getString(R.string.settings))
+
+    protected fun onPermissionRationaleText(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(R.string.tuner_permission_rationale))
+
+    protected fun onGrantPermissionButton(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(R.string.tuner_grant_permission))
+
+    protected fun onLicenseListItem(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(R.string.license))
+
+    protected fun onThirdPartyLicensesListItem(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(R.string.third_party_licenses))
+
+    protected fun onNightModeListItem(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(R.string.night_mode))
+
+    protected fun onNightModeOption(@StringRes labelResId: Int): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(labelResId))
+
+    protected fun onListItem(text: String): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(text)
+
+    protected fun scrollToListItem(text: String) {
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(text))
+    }
+
+    protected fun waitUntilTextExists(text: String, timeoutMillis: Long = 5_000) {
+        composeTestRule.waitUntilAtLeastOneExists(hasText(text, substring = true), timeoutMillis = timeoutMillis)
+    }
+
+    protected fun getString(@StringRes resId: Int): String = composeTestRule.activity.getString(resId)
 }

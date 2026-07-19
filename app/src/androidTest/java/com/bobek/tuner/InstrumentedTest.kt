@@ -18,14 +18,85 @@
 
 package com.bobek.tuner
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.performClick
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.filters.LargeTest
+import org.junit.Before
 import org.junit.Test
 
 @LargeTest
 class InstrumentedTest : AbstractAndroidTest() {
 
+    @Before
+    fun setup() {
+        composeTestRule.waitForIdle()
+    }
+
     @Test
     fun initialState() {
-        // TODO
+        onTopBarTitle().assertIsDisplayed()
+        onSettingsButton().assertIsDisplayed()
+        onPermissionRationaleText().assertIsDisplayed()
+        onGrantPermissionButton().assertIsDisplayed()
+    }
+
+    @Test
+    fun navigatingToSettingsAndBackShowsTunerScreenAgain() {
+        onSettingsButton().performClick()
+        composeTestRule.waitForIdle()
+        onTopBarTitle(R.string.settings).assertIsDisplayed()
+
+        pressBack()
+        composeTestRule.waitForIdle()
+        onTopBarTitle().assertIsDisplayed()
+    }
+
+    @Test
+    fun changingNightModeUpdatesSelectedTheme() {
+        openSettings()
+
+        onNightModeOption(R.string.night_mode_follow_system).assertIsDisplayed()
+
+        selectNightMode(R.string.night_mode_yes)
+        onNightModeOption(R.string.night_mode_yes).assertIsDisplayed()
+
+        selectNightMode(R.string.night_mode_follow_system)
+        onNightModeOption(R.string.night_mode_follow_system).assertIsDisplayed()
+    }
+
+    @Test
+    fun navigatingToLicenseShowsGplLicenseTextAndBackReturnsToSettings() {
+        openSettings()
+
+        onLicenseListItem().performClick()
+        composeTestRule.waitForIdle()
+
+        onTopBarTitle(R.string.license_name).assertIsDisplayed()
+        waitUntilTextExists("GNU GENERAL PUBLIC LICENSE")
+
+        pressBack()
+        composeTestRule.waitForIdle()
+        onTopBarTitle(R.string.settings).assertIsDisplayed()
+    }
+
+    @Test
+    fun navigatingToThirdPartyLicenseShowsApacheLicenseForMaterialSymbols() {
+        openSettings()
+
+        onThirdPartyLicensesListItem().performClick()
+        composeTestRule.waitForIdle()
+        onTopBarTitle(R.string.third_party_licenses).assertIsDisplayed()
+
+        scrollToListItem("Material Symbols")
+        onListItem("Material Symbols").performClick()
+        composeTestRule.waitForIdle()
+
+        onTopBarTitle("Material Symbols").assertIsDisplayed()
+        waitUntilTextExists("Apache License")
+
+        pressBack()
+        composeTestRule.waitForIdle()
+        onTopBarTitle(R.string.third_party_licenses).assertIsDisplayed()
     }
 }
