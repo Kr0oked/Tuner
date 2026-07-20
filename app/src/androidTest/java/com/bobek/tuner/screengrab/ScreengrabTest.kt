@@ -18,20 +18,30 @@
 
 package com.bobek.tuner.screengrab
 
+import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.bobek.tuner.AbstractAndroidTest
+import com.bobek.tuner.domain.DetectedNote
+import com.bobek.tuner.ui.MainContent
+import com.bobek.tuner.ui.tuner.ComposeTunerViewModel
+import com.bobek.tuner.ui.tuner.TunerState
 import org.junit.AfterClass
 import org.junit.BeforeClass
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.cleanstatusbar.CleanStatusBar
 import tools.fastlane.screengrab.locale.LocaleTestRule
 
 @LargeTest
-class ScreengrabTest : AbstractAndroidTest() {
+@RunWith(AndroidJUnit4::class)
+class ScreengrabTest {
+
+    @get:Rule
+    val composeTestRule = createComposeRule()
 
     @Rule
     @JvmField
@@ -44,7 +54,15 @@ class ScreengrabTest : AbstractAndroidTest() {
 
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
 
-        // TODO
+        composeTestRule.setContent {
+            MainContent(
+                tunerViewModel = ComposeTunerViewModel(
+                    TunerState.Listening(
+                        DetectedNote(name = "A", octave = 4, frequency = 440.0f, cents = 0)
+                    )
+                )
+            )
+        }
         composeTestRule.waitForIdle()
 
         Screengrab.screenshot(screenshotName)
