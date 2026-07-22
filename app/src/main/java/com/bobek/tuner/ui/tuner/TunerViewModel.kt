@@ -164,7 +164,6 @@ internal class NoteConfirmationGate(private val confirmationFrames: Int) {
     fun process(note: DetectedNote?): DetectedNote? {
         when {
             note == null -> reset()
-            confirmedNote == null -> confirmedNote = note
             note.isSameNote(confirmedNote) -> confirmedNote = note
             note.isSameNote(candidateNote) -> {
                 candidateFrameCount++

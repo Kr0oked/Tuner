@@ -85,22 +85,26 @@ class NoteConfirmationGateTest {
     }
 
     @Test
-    fun firstNoteIsConfirmedImmediately() {
+    fun firstNoteRequiresConfirmationFramesBeforeBeingConfirmed() {
         val gate = NoteConfirmationGate(confirmationFrames = 3)
+
+        assertNull(gate.process(noteA))
+        assertNull(gate.process(noteA))
         assertEquals(noteA, gate.process(noteA))
     }
 
     @Test
     fun sameNoteUpdatesConfirmedNoteImmediately() {
         val gate = NoteConfirmationGate(confirmationFrames = 3)
-        gate.process(noteA)
+        gate.confirm(noteA)
+
         assertEquals(noteAUpdated, gate.process(noteAUpdated))
     }
 
     @Test
     fun differentNoteIsNotConfirmedBeforeReachingConfirmationFrames() {
         val gate = NoteConfirmationGate(confirmationFrames = 3)
-        gate.process(noteA)
+        gate.confirm(noteA)
 
         assertEquals(noteA, gate.process(noteB))
         assertEquals(noteA, gate.process(noteB))
@@ -109,7 +113,7 @@ class NoteConfirmationGateTest {
     @Test
     fun differentNoteIsConfirmedAfterReachingConfirmationFrames() {
         val gate = NoteConfirmationGate(confirmationFrames = 3)
-        gate.process(noteA)
+        gate.confirm(noteA)
 
         gate.process(noteB)
         gate.process(noteB)
@@ -119,7 +123,7 @@ class NoteConfirmationGateTest {
     @Test
     fun flickeringCandidateNoteDoesNotDestabilizeConfirmedNote() {
         val gate = NoteConfirmationGate(confirmationFrames = 3)
-        gate.process(noteA)
+        gate.confirm(noteA)
 
         gate.process(noteB)
         assertEquals(noteA, gate.process(noteC))
@@ -129,10 +133,15 @@ class NoteConfirmationGateTest {
     @Test
     fun nullNoteResetsCandidateAndConfirmedNote() {
         val gate = NoteConfirmationGate(confirmationFrames = 3)
-        gate.process(noteA)
+        gate.confirm(noteA)
         gate.process(noteB)
 
         assertNull(gate.process(null))
-        assertEquals(noteB, gate.process(noteB))
+        assertEquals(noteB, gate.confirm(noteB))
+    }
+
+    private fun NoteConfirmationGate.confirm(note: DetectedNote): DetectedNote? {
+        repeat(2) { process(note) }
+        return process(note)
     }
 }
