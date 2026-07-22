@@ -18,15 +18,33 @@
 
 package com.bobek.tuner
 
+import androidx.annotation.StringRes
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasScrollToNodeAction
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
 @LargeTest
-class InstrumentedTest : AbstractAndroidTest() {
+@RunWith(AndroidJUnit4::class)
+@OptIn(ExperimentalTestApi::class)
+class InstrumentedTest {
+
+    @get:Rule
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Before
     fun setup() {
@@ -84,7 +102,7 @@ class InstrumentedTest : AbstractAndroidTest() {
     fun navigatingToThirdPartyLicenseShowsApacheLicenseForMaterialSymbols() {
         openSettings()
 
-        onThirdPartyLicensesListItem().performClick()
+        onThirdPartyLicensesListItem().performScrollTo().performClick()
         composeTestRule.waitForIdle()
         onTopBarTitle(R.string.third_party_licenses).assertIsDisplayed()
 
@@ -99,4 +117,58 @@ class InstrumentedTest : AbstractAndroidTest() {
         composeTestRule.waitForIdle()
         onTopBarTitle(R.string.third_party_licenses).assertIsDisplayed()
     }
+
+    private fun openSettings() {
+        composeTestRule.waitForIdle()
+        onSettingsButton().performClick()
+        composeTestRule.waitForIdle()
+    }
+
+    private fun selectNightMode(@StringRes labelResId: Int) {
+        composeTestRule.waitForIdle()
+        onNightModeListItem().performClick()
+        composeTestRule.waitForIdle()
+        onNightModeOption(labelResId).performClick()
+        composeTestRule.waitForIdle()
+    }
+
+    private fun onTopBarTitle(@StringRes titleResId: Int = R.string.tuner): SemanticsNodeInteraction =
+        onTopBarTitle(getString(titleResId))
+
+    private fun onTopBarTitle(title: String): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(title)
+
+    private fun onSettingsButton(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithContentDescription(getString(R.string.settings))
+
+    private fun onPermissionRationaleText(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(R.string.tuner_permission_rationale))
+
+    private fun onGrantPermissionButton(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(R.string.tuner_grant_permission))
+
+    private fun onLicenseListItem(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(R.string.license))
+
+    private fun onThirdPartyLicensesListItem(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(R.string.third_party_licenses))
+
+    private fun onNightModeListItem(): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(R.string.night_mode))
+
+    private fun onNightModeOption(@StringRes labelResId: Int): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(getString(labelResId))
+
+    private fun onListItem(text: String): SemanticsNodeInteraction =
+        composeTestRule.onNodeWithText(text)
+
+    private fun scrollToListItem(text: String) {
+        composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(text))
+    }
+
+    private fun waitUntilTextExists(text: String, timeoutMillis: Long = 5_000) {
+        composeTestRule.waitUntilAtLeastOneExists(hasText(text, substring = true), timeoutMillis = timeoutMillis)
+    }
+
+    private fun getString(@StringRes resId: Int): String = composeTestRule.activity.getString(resId)
 }
