@@ -50,9 +50,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -131,11 +134,11 @@ fun TunerScreen(
                     }
                 }
 
-                CentsMeter(
+                CentsBarMeter(
                     cents = cents,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp)
+                        .height(64.dp)
                         .padding(horizontal = 8.dp)
                 )
                 Row(
@@ -223,51 +226,90 @@ private fun ListeningContent(
     }
 }
 
+private const val MAX_CENTS = 50f
+private const val BARS_PER_SIDE = 8
+
 @Composable
-private fun CentsMeter(cents: Int?, modifier: Modifier = Modifier) {
-    val animatedCents by animateFloatAsState(
-        targetValue = cents?.toFloat() ?: 0f,
+private fun CentsBarMeter(cents: Int?, modifier: Modifier = Modifier) {
+    val magnitude = cents?.let { abs(it).toFloat().coerceAtMost(MAX_CENTS) } ?: 0f
+    val animatedMagnitude by animateFloatAsState(
+        targetValue = magnitude,
         animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMedium),
-        label = "cents"
+        label = "centsMagnitude"
     )
-    val needleColor = if (cents != null) centsColor(cents) else Color.Unspecified
-    val trackColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.15f)
-    val centerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+    val isSharp = (cents ?: 0) > 0
+    val isFlat = (cents ?: 0) < 0
+    val inTune = cents != null && abs(cents) < 5
+
+    val unlitColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+    val inTuneColor = MaterialTheme.colorScheme.primary
+    val warnColor = MaterialTheme.colorScheme.tertiary
+    val outOfTuneColor = MaterialTheme.colorScheme.error
+    val centerColor = if (inTune) inTuneColor else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
 
     Canvas(modifier = modifier) {
-        val width = size.width
+        val centerGap = 10.dp.toPx()
+        val gap = 3.dp.toPx()
+        val sideWidth = (size.width - centerGap) / 2f
+        val barWidth = (sideWidth - gap * (BARS_PER_SIDE - 1)) / BARS_PER_SIDE
         val centerY = size.height / 2f
+        val litLevel = (animatedMagnitude / MAX_CENTS) * BARS_PER_SIDE
 
-        drawLine(
-            color = trackColor,
-            start = Offset(0f, centerY),
-            end = Offset(width, centerY),
-            strokeWidth = 3.dp.toPx(),
-            cap = StrokeCap.Round
+        drawCircle(
+            color = centerColor,
+            radius = centerGap / 2f,
+            center = Offset(size.width / 2f, centerY)
         )
 
-        for (mark in listOf(-50, -25, 0, 25, 50)) {
-            val x = width * (mark + 50) / 100f
-            val tickHalfHeight = if (mark == 0) 10.dp.toPx() else 6.dp.toPx()
-            drawLine(
-                color = if (mark == 0) centerColor else trackColor,
-                start = Offset(x, centerY - tickHalfHeight),
-                end = Offset(x, centerY + tickHalfHeight),
-                strokeWidth = if (mark == 0) 2.dp.toPx() else 1.5.dp.toPx()
-            )
-        }
+        for (i in 0 until BARS_PER_SIDE) {
+            val positionFraction = (i + 1) / BARS_PER_SIDE.toFloat()
+            val litFraction = (litLevel - i).coerceIn(0f, 1f)
+            val litColor = when {
+                positionFraction <= 0.25f -> inTuneColor
+                positionFraction <= 0.65f -> warnColor
+                else -> outOfTuneColor
+            }
 
-        if (cents != null) {
-            val needleX = width * (animatedCents + 50) / 100f
-            drawLine(
-                color = needleColor,
-                start = Offset(needleX, centerY - 18.dp.toPx()),
-                end = Offset(needleX, centerY + 18.dp.toPx()),
-                strokeWidth = 4.dp.toPx(),
-                cap = StrokeCap.Round
-            )
+            val rightX = size.width / 2f + centerGap / 2f + i * (barWidth + gap)
+            val leftX = size.width / 2f - centerGap / 2f - (i + 1) * barWidth - i * gap
+
+            drawGlowingBar(rightX, centerY, barWidth, size.height, unlitColor, litColor, if (isSharp) litFraction else 0f)
+            drawGlowingBar(leftX, centerY, barWidth, size.height, unlitColor, litColor, if (isFlat) litFraction else 0f)
         }
     }
+}
+
+private fun DrawScope.drawGlowingBar(
+    x: Float,
+    centerY: Float,
+    barWidth: Float,
+    maxBarHeight: Float,
+    unlitColor: Color,
+    litColor: Color,
+    litFraction: Float
+) {
+    val barHeight = maxBarHeight * (0.5f + 0.5f * litFraction)
+    val color = lerp(unlitColor, litColor, litFraction)
+    val cornerRadius = CornerRadius(barWidth / 2.5f)
+
+    if (litFraction > 0f) {
+        val glowScale = 1f + litFraction * 0.6f
+        val glowWidth = barWidth * glowScale
+        val glowHeight = barHeight * glowScale
+        drawRoundRect(
+            color = litColor.copy(alpha = litFraction * 0.35f),
+            topLeft = Offset(x - (glowWidth - barWidth) / 2f, centerY - glowHeight / 2f),
+            size = Size(glowWidth, glowHeight),
+            cornerRadius = cornerRadius
+        )
+    }
+
+    drawRoundRect(
+        color = color,
+        topLeft = Offset(x, centerY - barHeight / 2f),
+        size = Size(barWidth, barHeight),
+        cornerRadius = cornerRadius
+    )
 }
 
 @Composable
