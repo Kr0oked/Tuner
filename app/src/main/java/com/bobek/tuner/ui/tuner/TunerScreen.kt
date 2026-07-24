@@ -28,8 +28,10 @@ import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -111,44 +113,52 @@ fun TunerScreen(
 
             val cents: Int? = (state as? TunerState.Listening)?.note?.cents
 
-            Column(
+            BoxWithConstraints(
                 modifier = Modifier
                     .padding(padding)
                     .fillMaxSize()
             ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    when (val currentState = state) {
-                        is TunerState.Idle -> IdleContent(
-                            onGrantPermission = { permissionLauncher.launch(RECORD_AUDIO) }
-                        )
+                val isLandscape = maxWidth > maxHeight
 
-                        is TunerState.Listening -> ListeningContent(
-                            note = currentState.note
-                        )
+                if (isLandscape) {
+                    Row(modifier = Modifier.fillMaxSize()) {
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            NoteContent(
+                                state = state,
+                                onGrantPermission = { permissionLauncher.launch(RECORD_AUDIO) },
+                                compact = true
+                            )
+                        }
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxHeight(),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            MeterContent(cents)
+                        }
                     }
-                }
-
-                CentsBarMeter(
-                    cents = cents,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(64.dp)
-                        .padding(horizontal = 8.dp)
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text("−50¢", style = MaterialTheme.typography.labelSmall)
-                    Text("0¢", style = MaterialTheme.typography.labelSmall)
-                    Text("+50¢", style = MaterialTheme.typography.labelSmall)
+                } else {
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            NoteContent(
+                                state = state,
+                                onGrantPermission = { permissionLauncher.launch(RECORD_AUDIO) },
+                                compact = false
+                            )
+                        }
+                        MeterContent(cents)
+                    }
                 }
             }
         }
@@ -156,20 +166,56 @@ fun TunerScreen(
 }
 
 @Composable
+private fun NoteContent(
+    state: TunerState,
+    onGrantPermission: () -> Unit,
+    compact: Boolean
+) {
+    when (state) {
+        is TunerState.Idle -> IdleContent(onGrantPermission = onGrantPermission, compact = compact)
+        is TunerState.Listening -> ListeningContent(note = state.note, compact = compact)
+    }
+}
+
+@Composable
+private fun MeterContent(cents: Int?, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        CentsBarMeter(
+            cents = cents,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .padding(horizontal = 8.dp)
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text("−50¢", style = MaterialTheme.typography.labelSmall)
+            Text("0¢", style = MaterialTheme.typography.labelSmall)
+            Text("+50¢", style = MaterialTheme.typography.labelSmall)
+        }
+    }
+}
+
+@Composable
 private fun IdleContent(
     onGrantPermission: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    compact: Boolean = false
 ) {
     Column(
-        modifier = modifier.padding(24.dp),
+        modifier = modifier.padding(if (compact) 12.dp else 24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = stringResource(R.string.tuner_permission_rationale),
-            style = MaterialTheme.typography.bodyLarge,
+            style = if (compact) MaterialTheme.typography.bodyMedium else MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 24.dp)
+            modifier = Modifier.padding(bottom = if (compact) 12.dp else 24.dp)
         )
         Button(onClick = onGrantPermission) {
             Text(stringResource(R.string.tuner_grant_permission))
@@ -180,10 +226,11 @@ private fun IdleContent(
 @Composable
 private fun ListeningContent(
     note: DetectedNote?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    compact: Boolean = false
 ) {
     Column(
-        modifier = modifier.padding(24.dp),
+        modifier = modifier.padding(if (compact) 8.dp else 24.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -193,12 +240,12 @@ private fun ListeningContent(
         if (note != null) {
             Text(
                 text = "${note.name}${note.octave}",
-                fontSize = 96.sp,
+                fontSize = if (compact) 56.sp else 96.sp,
                 fontWeight = FontWeight.Bold,
                 color = noteColor
             )
         } else {
-            CircularProgressIndicator(modifier = Modifier.size(72.dp))
+            CircularProgressIndicator(modifier = Modifier.size(if (compact) 48.dp else 72.dp))
         }
 
         if (note == null) {
