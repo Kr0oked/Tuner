@@ -20,7 +20,9 @@ package com.bobek.tuner.ui.tuner
 
 import com.bobek.tuner.domain.DetectedNote
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TunerViewModelTest {
@@ -36,6 +38,46 @@ class TunerViewModelTest {
         val viewModel = TunerViewModel()
         viewModel.stopListening()
         assertEquals(TunerState.Idle, viewModel.getTunerStateFlow().value)
+    }
+}
+
+class OnsetDetectorTest {
+
+    private fun silence(size: Int = 8) = FloatArray(size)
+    private fun tone(amplitude: Float, size: Int = 8) = FloatArray(size) { amplitude }
+
+    @Test
+    fun silenceIsNotAnOnset() {
+        val detector = OnsetDetector(energyRatio = 2.5f, minRms = 0.01f)
+        assertFalse(detector.isOnset(silence()))
+    }
+
+    @Test
+    fun suddenLoudSignalAfterSilenceIsAnOnset() {
+        val detector = OnsetDetector(energyRatio = 2.5f, minRms = 0.01f)
+        detector.isOnset(silence())
+        assertTrue(detector.isOnset(tone(amplitude = 0.5f)))
+    }
+
+    @Test
+    fun sustainedSignalIsNotAnOnsetOnFollowingFrames() {
+        val detector = OnsetDetector(energyRatio = 2.5f, minRms = 0.01f)
+        detector.isOnset(tone(amplitude = 0.5f))
+        assertFalse(detector.isOnset(tone(amplitude = 0.5f)))
+    }
+
+    @Test
+    fun decayingSignalIsNotAnOnset() {
+        val detector = OnsetDetector(energyRatio = 2.5f, minRms = 0.01f)
+        detector.isOnset(tone(amplitude = 0.5f))
+        assertFalse(detector.isOnset(tone(amplitude = 0.3f)))
+    }
+
+    @Test
+    fun quietSignalBelowMinRmsIsNotAnOnset() {
+        val detector = OnsetDetector(energyRatio = 2.5f, minRms = 0.01f)
+        detector.isOnset(silence())
+        assertFalse(detector.isOnset(tone(amplitude = 0.005f)))
     }
 }
 

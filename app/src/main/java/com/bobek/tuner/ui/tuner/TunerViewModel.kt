@@ -36,6 +36,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.math.sqrt
 
 sealed class TunerState {
     object Idle : TunerState()
@@ -56,6 +57,8 @@ private const val SAMPLE_RATE = 44100
 private const val ANALYSIS_SIZE = 4096
 private const val FREQUENCY_SMOOTHING_ALPHA = 0.3f
 private const val NOTE_CONFIRMATION_FRAMES = 3
+private const val ONSET_ENERGY_RATIO = 2.5f
+private const val ONSET_MIN_RMS = 0.01f
 
 @HiltViewModel
 class TunerViewModel @Inject constructor() : ViewModel(), ITunerViewModel {
@@ -84,12 +87,13 @@ class TunerViewModel @Inject constructor() : ViewModel(), ITunerViewModel {
 
         val smoothing = FrequencySmoothing(FREQUENCY_SMOOTHING_ALPHA)
         val gate = NoteConfirmationGate(NOTE_CONFIRMATION_FRAMES)
+        val onsetDetector = OnsetDetector(ONSET_ENERGY_RATIO, ONSET_MIN_RMS)
         val buffer = FloatArray(ANALYSIS_SIZE)
 
         try {
             while (currentCoroutineContext().isActive) {
                 val read = record.read(buffer, 0, ANALYSIS_SIZE, AudioRecord.READ_BLOCKING)
-                if (read > 0) {
+                if (read > 0 && !onsetDetector.isOnset(buffer)) {
                     val frequency = PitchDetector.detect(buffer, SAMPLE_RATE)
                     val note = smoothing.process(frequency)?.let { DetectedNote.fromFrequency(it) }
                     tunerStateFlow.value = TunerState.Listening(gate.process(note))
@@ -139,6 +143,29 @@ class ComposeTunerViewModel(
     override fun getTunerStateFlow() = MutableStateFlow(tunerState)
     override fun startListening() = Unit
     override fun stopListening() = Unit
+}
+
+/**
+ * Detects the sudden rise in signal energy caused by a fresh pluck, so its noisy
+ * attack transient can be excluded from pitch detection.
+ */
+internal class OnsetDetector(private val energyRatio: Float, private val minRms: Float) {
+
+    private var previousRms = 0f
+
+    /** Returns true if [buffer] is significantly louder than the previous call's buffer. */
+    fun isOnset(buffer: FloatArray): Boolean {
+        val rms = rootMeanSquare(buffer)
+        val onset = rms > minRms && rms > previousRms * energyRatio
+        previousRms = rms
+        return onset
+    }
+
+    private fun rootMeanSquare(buffer: FloatArray): Float {
+        var sumOfSquares = 0f
+        for (sample in buffer) sumOfSquares += sample * sample
+        return sqrt(sumOfSquares / buffer.size)
+    }
 }
 
 internal class FrequencySmoothing(private val alpha: Float) {
