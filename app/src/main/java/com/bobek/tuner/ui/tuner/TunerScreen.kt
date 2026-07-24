@@ -55,7 +55,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -227,54 +226,51 @@ private fun ListeningContent(
 }
 
 private const val MAX_CENTS = 50f
-private const val BARS_PER_SIDE = 8
+private const val TOTAL_BARS = 17
+private const val MIN_HEIGHT_FRACTION = 0.28f
+private const val MIN_WIDTH_FRACTION = 0.5f
 
 @Composable
 private fun CentsBarMeter(cents: Int?, modifier: Modifier = Modifier) {
-    val magnitude = cents?.let { abs(it).toFloat().coerceAtMost(MAX_CENTS) } ?: 0f
-    val animatedMagnitude by animateFloatAsState(
-        targetValue = magnitude,
+    val animatedCents by animateFloatAsState(
+        targetValue = cents?.toFloat() ?: 0f,
         animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMedium),
-        label = "centsMagnitude"
+        label = "cents"
     )
-    val isSharp = (cents ?: 0) > 0
-    val isFlat = (cents ?: 0) < 0
-    val inTune = cents != null && abs(cents) < 5
+    val hasNote = cents != null
 
-    val unlitColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
     val inTuneColor = MaterialTheme.colorScheme.primary
     val warnColor = MaterialTheme.colorScheme.tertiary
     val outOfTuneColor = MaterialTheme.colorScheme.error
-    val centerColor = if (inTune) inTuneColor else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
+    val dimAlpha = 0.22f
 
     Canvas(modifier = modifier) {
-        val centerGap = 10.dp.toPx()
+        val centerIndex = TOTAL_BARS / 2
         val gap = 3.dp.toPx()
-        val sideWidth = (size.width - centerGap) / 2f
-        val barWidth = (sideWidth - gap * (BARS_PER_SIDE - 1)) / BARS_PER_SIDE
         val centerY = size.height / 2f
-        val litLevel = (animatedMagnitude / MAX_CENTS) * BARS_PER_SIDE
+        val activePosition = (animatedCents + MAX_CENTS) / (2 * MAX_CENTS) * (TOTAL_BARS - 1)
 
-        drawCircle(
-            color = centerColor,
-            radius = centerGap / 2f,
-            center = Offset(size.width / 2f, centerY)
-        )
+        val widthFractions = FloatArray(TOTAL_BARS) { i ->
+            val positionFraction = abs(i - centerIndex) / centerIndex.toFloat()
+            1f - (1f - MIN_WIDTH_FRACTION) * positionFraction
+        }
+        val baseBarWidth = (size.width - gap * (TOTAL_BARS - 1)) / widthFractions.sum()
 
-        for (i in 0 until BARS_PER_SIDE) {
-            val positionFraction = (i + 1) / BARS_PER_SIDE.toFloat()
-            val litFraction = (litLevel - i).coerceIn(0f, 1f)
-            val litColor = when {
+        var x = 0f
+        for (i in 0 until TOTAL_BARS) {
+            val positionFraction = abs(i - centerIndex) / centerIndex.toFloat()
+            val barWidth = baseBarWidth * widthFractions[i]
+            val barHeight = size.height * (1f - (1f - MIN_HEIGHT_FRACTION) * positionFraction)
+            val zoneColor = when {
                 positionFraction <= 0.25f -> inTuneColor
                 positionFraction <= 0.65f -> warnColor
                 else -> outOfTuneColor
             }
+            val litFraction = if (hasNote) (1f - abs(i - activePosition) / 1.2f).coerceIn(0f, 1f) else 0f
 
-            val rightX = size.width / 2f + centerGap / 2f + i * (barWidth + gap)
-            val leftX = size.width / 2f - centerGap / 2f - (i + 1) * barWidth - i * gap
+            drawGlowingBar(x, centerY, barWidth, barHeight, zoneColor, dimAlpha, litFraction)
 
-            drawGlowingBar(rightX, centerY, barWidth, size.height, unlitColor, litColor, if (isSharp) litFraction else 0f)
-            drawGlowingBar(leftX, centerY, barWidth, size.height, unlitColor, litColor, if (isFlat) litFraction else 0f)
+            x += barWidth + gap
         }
     }
 }
@@ -283,21 +279,20 @@ private fun DrawScope.drawGlowingBar(
     x: Float,
     centerY: Float,
     barWidth: Float,
-    maxBarHeight: Float,
-    unlitColor: Color,
-    litColor: Color,
+    barHeight: Float,
+    zoneColor: Color,
+    dimAlpha: Float,
     litFraction: Float
 ) {
-    val barHeight = maxBarHeight * (0.5f + 0.5f * litFraction)
-    val color = lerp(unlitColor, litColor, litFraction)
+    val alpha = dimAlpha + (1f - dimAlpha) * litFraction
     val cornerRadius = CornerRadius(barWidth / 2.5f)
 
-    if (litFraction > 0f) {
-        val glowScale = 1f + litFraction * 0.6f
+    if (litFraction > 0.05f) {
+        val glowScale = 1f + litFraction * 0.5f
         val glowWidth = barWidth * glowScale
         val glowHeight = barHeight * glowScale
         drawRoundRect(
-            color = litColor.copy(alpha = litFraction * 0.35f),
+            color = zoneColor.copy(alpha = litFraction * 0.35f),
             topLeft = Offset(x - (glowWidth - barWidth) / 2f, centerY - glowHeight / 2f),
             size = Size(glowWidth, glowHeight),
             cornerRadius = cornerRadius
@@ -305,7 +300,7 @@ private fun DrawScope.drawGlowingBar(
     }
 
     drawRoundRect(
-        color = color,
+        color = zoneColor.copy(alpha = alpha),
         topLeft = Offset(x, centerY - barHeight / 2f),
         size = Size(barWidth, barHeight),
         cornerRadius = cornerRadius
