@@ -184,7 +184,7 @@ private fun MeterContent(cents: Int?, modifier: Modifier = Modifier) {
             cents = cents,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(64.dp)
+                .height(120.dp)
                 .padding(horizontal = 8.dp)
         )
         Row(
