@@ -1,0 +1,12 @@
+Aplikacja nasłuchuje przez mikrofon i pokazuje w czasie rzeczywistym, jak blisko jest każda nuta,
+z przejrzystym interfejsem i bez rozpraszaczy.
+
+Funkcje:
+* Tuner chromatyczny z automatycznym wykrywaniem nut
+* Precyzyjne wykrywanie wysokości dźwięku co do centa
+* Jasny i ciemny motyw
+* Brak reklam
+* Brak trackerów
+* Brak zbędnych uprawnień
+
+Miłej zabawy!

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tuner">Afinador</string>
+    <string name="tuner_permission_rationale">Se requiere acceso al micrófono para detectar el tono de tu instrumento.</string>
+    <string name="tuner_grant_permission">Conceder permiso</string>
+    <string name="tuner_listening">Escuchando…</string>
+    <string name="settings">Ajustes</string>
+    <string name="display">Pantalla</string>
+    <string name="night_mode">Tema</string>
+    <string name="night_mode_follow_system">Seguir sistema</string>
+    <string name="night_mode_no">Claro</string>
+    <string name="night_mode_yes">Oscuro</string>
+    <string name="about">Acerca de</string>
+    <string name="author">Autor</string>
+    <string name="license">Licencia</string>
+    <string name="third_party_licenses">Licencias de terceros</string>
+    <string name="third_party_licenses_summary">Licencias de las bibliotecas de código abierto incluidas</string>
+    <string name="source_code">Código fuente</string>
+    <string name="version">Versión</string>
+</resources>

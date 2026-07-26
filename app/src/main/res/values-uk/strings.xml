@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tuner">Тюнер</string>
+    <string name="tuner_permission_rationale">Доступ до мікрофона потрібен для визначення висоти звуку вашого інструмента.</string>
+    <string name="tuner_grant_permission">Надати дозвіл</string>
+    <string name="tuner_listening">Прослуховування…</string>
+    <string name="settings">Налаштування</string>
+    <string name="display">Екран</string>
+    <string name="night_mode">Тема</string>
+    <string name="night_mode_follow_system">Як у системі</string>
+    <string name="night_mode_no">Світла</string>
+    <string name="night_mode_yes">Темна</string>
+    <string name="about">Про застосунок</string>
+    <string name="author">Автор</string>
+    <string name="license">Ліцензія</string>
+    <string name="third_party_licenses">Ліцензії сторонніх бібліотек</string>
+    <string name="third_party_licenses_summary">Ліцензії включених бібліотек з відкритим кодом</string>
+    <string name="source_code">Вихідний код</string>
+    <string name="version">Версія</string>
+</resources>

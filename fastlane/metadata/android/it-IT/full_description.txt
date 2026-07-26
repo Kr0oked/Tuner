@@ -1,0 +1,12 @@
+L'app ascolta tramite il microfono e mostra in tempo reale quanto è vicina ogni nota,
+con un'interfaccia pulita e senza distrazioni.
+
+Caratteristiche:
+* Accordatore cromatico con rilevamento automatico delle note
+* Rilevamento preciso dell'intonazione, fino al cent
+* Tema chiaro e scuro
+* Nessuna pubblicità
+* Nessun tracciamento
+* Nessun permesso superfluo
+
+Buon divertimento!

@@ -1,0 +1,12 @@
+De app luistert via je microfoon en laat in realtime zien hoe dicht je bij elke noot zit,
+met een overzichtelijke interface en zonder afleiding.
+
+Functies:
+* Chromatisch stemapparaat met automatische nootdetectie
+* Nauwkeurige toonhoogtedetectie tot op de cent
+* Licht en donker thema
+* Geen advertenties
+* Geen trackers
+* Geen onnodige machtigingen
+
+Veel plezier!

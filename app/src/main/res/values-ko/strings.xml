@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tuner">튜너</string>
+    <string name="tuner_permission_rationale">악기의 음높이를 감지하려면 마이크 접근 권한이 필요합니다.</string>
+    <string name="tuner_grant_permission">권한 허용</string>
+    <string name="tuner_listening">듣는 중…</string>
+    <string name="settings">설정</string>
+    <string name="display">화면</string>
+    <string name="night_mode">테마</string>
+    <string name="night_mode_follow_system">시스템 설정 따르기</string>
+    <string name="night_mode_no">밝게</string>
+    <string name="night_mode_yes">어둡게</string>
+    <string name="about">정보</string>
+    <string name="author">제작자</string>
+    <string name="license">라이선스</string>
+    <string name="third_party_licenses">타사 라이선스</string>
+    <string name="third_party_licenses_summary">포함된 오픈 소스 라이브러리의 라이선스</string>
+    <string name="source_code">소스 코드</string>
+    <string name="version">버전</string>
+</resources>

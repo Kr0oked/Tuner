@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tuner">دوزان</string>
+    <string name="tuner_permission_rationale">يلزم الوصول إلى الميكروفون لاكتشاف طبقة صوت آلتك الموسيقية.</string>
+    <string name="tuner_grant_permission">منح الإذن</string>
+    <string name="tuner_listening">الاستماع…</string>
+    <string name="settings">الإعدادات</string>
+    <string name="display">العرض</string>
+    <string name="night_mode">المظهر</string>
+    <string name="night_mode_follow_system">اتباع النظام</string>
+    <string name="night_mode_no">فاتح</string>
+    <string name="night_mode_yes">داكن</string>
+    <string name="about">حول التطبيق</string>
+    <string name="author">المؤلف</string>
+    <string name="license">الترخيص</string>
+    <string name="third_party_licenses">تراخيص الجهات الخارجية</string>
+    <string name="third_party_licenses_summary">تراخيص مكتبات المصدر المفتوح المضمنة</string>
+    <string name="source_code">الكود المصدري</string>
+    <string name="version">الإصدار</string>
+</resources>

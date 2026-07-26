@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tuner">Stimmgerät</string>
-    <string name="tuner_permission_rationale">Microphone access is required to detect the pitch of your instrument.</string>
-    <string name="tuner_grant_permission">Grant permission</string>
-    <string name="tuner_listening">Listening…</string>
+    <string name="tuner_permission_rationale">Mikrofonzugriff wird benötigt, um die Tonhöhe deines Instruments zu erkennen.</string>
+    <string name="tuner_grant_permission">Zugriff erlauben</string>
+    <string name="tuner_listening">Höre zu…</string>
     <string name="settings">Einstellungen</string>
     <string name="display">Anzeige</string>
     <string name="night_mode">Design</string>
-    <string name="night_mode_follow_system">System folgen</string>
+    <string name="night_mode_follow_system">Systemstandard</string>
     <string name="night_mode_no">Hell</string>
     <string name="night_mode_yes">Dunkel</string>
     <string name="about">Über die App</string>
-    <string name="author">Author</string>
+    <string name="author">Autor</string>
     <string name="license">Lizenz</string>
     <string name="third_party_licenses">Drittanbieter-Lizenzen</string>
     <string name="third_party_licenses_summary">Lizenzen von enthaltenen Open-Source-Bibliotheken</string>

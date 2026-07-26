@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tuner">调音器</string>
+    <string name="tuner_permission_rationale">需要麦克风权限才能检测乐器的音高。</string>
+    <string name="tuner_grant_permission">授予权限</string>
+    <string name="tuner_listening">正在监听…</string>
+    <string name="settings">设置</string>
+    <string name="display">显示</string>
+    <string name="night_mode">主题</string>
+    <string name="night_mode_follow_system">跟随系统</string>
+    <string name="night_mode_no">浅色</string>
+    <string name="night_mode_yes">深色</string>
+    <string name="about">关于</string>
+    <string name="author">作者</string>
+    <string name="license">许可证</string>
+    <string name="third_party_licenses">第三方许可证</string>
+    <string name="third_party_licenses_summary">所包含开源库的许可证</string>
+    <string name="source_code">源代码</string>
+    <string name="version">版本</string>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tuner">ट्यूनर</string>
+    <string name="tuner_permission_rationale">आपके वाद्ययंत्र की पिच का पता लगाने के लिए माइक्रोफ़ोन एक्सेस आवश्यक है।</string>
+    <string name="tuner_grant_permission">अनुमति दें</string>
+    <string name="tuner_listening">सुन रहा है…</string>
+    <string name="settings">सेटिंग्स</string>
+    <string name="display">डिस्प्ले</string>
+    <string name="night_mode">थीम</string>
+    <string name="night_mode_follow_system">सिस्टम का अनुसरण करें</string>
+    <string name="night_mode_no">हल्का</string>
+    <string name="night_mode_yes">गहरा</string>
+    <string name="about">ऐप के बारे में</string>
+    <string name="author">लेखक</string>
+    <string name="license">लाइसेंस</string>
+    <string name="third_party_licenses">तृतीय-पक्ष लाइसेंस</string>
+    <string name="third_party_licenses_summary">शामिल ओपन सोर्स लाइब्रेरी के लाइसेंस</string>
+    <string name="source_code">स्रोत कोड</string>
+    <string name="version">संस्करण</string>
+</resources>

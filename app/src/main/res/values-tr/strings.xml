@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tuner">Akort Cihazı</string>
+    <string name="tuner_permission_rationale">Enstrümanınızın perdesini algılamak için mikrofon erişimi gereklidir.</string>
+    <string name="tuner_grant_permission">İzin ver</string>
+    <string name="tuner_listening">Dinleniyor…</string>
+    <string name="settings">Ayarlar</string>
+    <string name="display">Görünüm</string>
+    <string name="night_mode">Tema</string>
+    <string name="night_mode_follow_system">Sistemi izle</string>
+    <string name="night_mode_no">Açık</string>
+    <string name="night_mode_yes">Koyu</string>
+    <string name="about">Hakkında</string>
+    <string name="author">Yazar</string>
+    <string name="license">Lisans</string>
+    <string name="third_party_licenses">Üçüncü taraf lisansları</string>
+    <string name="third_party_licenses_summary">Dahil edilen açık kaynak kütüphanelerin lisansları</string>
+    <string name="source_code">Kaynak kodu</string>
+    <string name="version">Sürüm</string>
+</resources>

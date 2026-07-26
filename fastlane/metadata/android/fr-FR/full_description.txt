@@ -1,0 +1,12 @@
+L'application écoute via votre microphone et affiche en temps réel la justesse de chaque note,
+avec une interface épurée et sans distraction.
+
+Fonctionnalités :
+* Accordeur chromatique avec détection automatique des notes
+* Détection précise de la hauteur, au cent près
+* Thème clair et sombre
+* Sans publicité
+* Sans traceurs
+* Sans permissions inutiles
+
+Amusez-vous bien !

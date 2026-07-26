@@ -1,4 +1,4 @@
-Tuner hört über dein Mikrofon zu und zeigt dir in Echtzeit, wie nah du an jedem Ton bist,
+Die App hört über dein Mikrofon zu und zeigt dir in Echtzeit, wie nah du an jedem Ton bist,
 mit einer klaren Oberfläche und ganz ohne Ablenkung.
 
 Inhalt:

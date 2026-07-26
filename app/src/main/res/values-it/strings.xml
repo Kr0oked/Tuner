@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tuner">Accordatore</string>
+    <string name="tuner_permission_rationale">È necessario l\'accesso al microfono per rilevare l\'intonazione del tuo strumento.</string>
+    <string name="tuner_grant_permission">Concedi permesso</string>
+    <string name="tuner_listening">In ascolto…</string>
+    <string name="settings">Impostazioni</string>
+    <string name="display">Schermo</string>
+    <string name="night_mode">Tema</string>
+    <string name="night_mode_follow_system">Segui sistema</string>
+    <string name="night_mode_no">Chiaro</string>
+    <string name="night_mode_yes">Scuro</string>
+    <string name="about">Informazioni</string>
+    <string name="author">Autore</string>
+    <string name="license">Licenza</string>
+    <string name="third_party_licenses">Licenze di terze parti</string>
+    <string name="third_party_licenses_summary">Licenze delle librerie open source incluse</string>
+    <string name="source_code">Codice sorgente</string>
+    <string name="version">Versione</string>
+</resources>

@@ -1,0 +1,12 @@
+La app escucha a través de tu micrófono y muestra en tiempo real qué tan cerca está cada nota,
+con una interfaz limpia y sin distracciones.
+
+Características:
+* Afinador cromático con detección automática de notas
+* Detección precisa de tono, hasta el cent
+* Tema claro y oscuro
+* Sin publicidad
+* Sin rastreadores
+* Sin permisos innecesarios
+
+¡Que lo disfrutes!

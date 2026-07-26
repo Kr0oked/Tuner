@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tuner">Stemapparaat</string>
+    <string name="tuner_permission_rationale">Microfoontoegang is vereist om de toonhoogte van je instrument te detecteren.</string>
+    <string name="tuner_grant_permission">Toestemming verlenen</string>
+    <string name="tuner_listening">Luisteren…</string>
+    <string name="settings">Instellingen</string>
+    <string name="display">Scherm</string>
+    <string name="night_mode">Thema</string>
+    <string name="night_mode_follow_system">Systeem volgen</string>
+    <string name="night_mode_no">Licht</string>
+    <string name="night_mode_yes">Donker</string>
+    <string name="about">Over</string>
+    <string name="author">Auteur</string>
+    <string name="license">Licentie</string>
+    <string name="third_party_licenses">Licenties van derden</string>
+    <string name="third_party_licenses_summary">Licenties van meegeleverde opensource-bibliotheken</string>
+    <string name="source_code">Broncode</string>
+    <string name="version">Versie</string>
+</resources>

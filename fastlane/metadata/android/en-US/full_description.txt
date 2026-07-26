@@ -1,4 +1,4 @@
-Tuner listens through your microphone and shows in real time how close each note is,
+The app listens through your microphone and shows in real time how close each note is,
 with a clean interface and no distractions.
 
 Features:

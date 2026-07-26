@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tuner">Tuner</string>
+    <string name="tuner_permission_rationale">Dostęp do mikrofonu jest wymagany do wykrycia wysokości dźwięku Twojego instrumentu.</string>
+    <string name="tuner_grant_permission">Przyznaj uprawnienie</string>
+    <string name="tuner_listening">Nasłuchiwanie…</string>
+    <string name="settings">Ustawienia</string>
+    <string name="display">Wyświetlacz</string>
+    <string name="night_mode">Motyw</string>
+    <string name="night_mode_follow_system">Zgodnie z systemem</string>
+    <string name="night_mode_no">Jasny</string>
+    <string name="night_mode_yes">Ciemny</string>
+    <string name="about">O aplikacji</string>
+    <string name="author">Autor</string>
+    <string name="license">Licencja</string>
+    <string name="third_party_licenses">Licencje stron trzecich</string>
+    <string name="third_party_licenses_summary">Licencje dołączonych bibliotek open source</string>
+    <string name="source_code">Kod źródłowy</string>
+    <string name="version">Wersja</string>
+</resources>

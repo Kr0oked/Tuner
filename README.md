@@ -6,7 +6,7 @@
 
 ### A simple and precise tuner for Android
 
-Tuner listens through your microphone and shows in real time how close each note is,
+The app listens through your microphone and shows in real time how close each note is,
 with a clean interface and no distractions.
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"

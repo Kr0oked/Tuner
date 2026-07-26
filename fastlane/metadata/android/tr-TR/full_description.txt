@@ -1,0 +1,12 @@
+Uygulama mikrofonunuz aracılığıyla dinler ve her notaya ne kadar yakın olduğunuzu gerçek zamanlı olarak gösterir,
+sade bir arayüz ile ve dikkat dağıtıcı unsurlar olmadan.
+
+Özellikler:
+* Otomatik nota algılamalı kromatik akort cihazı
+* Sent hassasiyetinde perde algılama
+* Açık ve koyu tema
+* Reklam yok
+* Takip yok
+* Gereksiz izin yok
+
+İyi eğlenceler!
