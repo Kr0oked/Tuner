@@ -25,13 +25,10 @@ fastlane android apk
 # Run lint
 ./gradlew lint
 
-# Screenshots via Fastlane (requires device)
-fastlane android grab_screen_phone_1
-fastlane android grab_screen_phone_2
-fastlane android grab_screen_seven_inch_1
-fastlane android grab_screen_seven_inch_2
-fastlane android grab_screen_ten_inch_1
-fastlane android grab_screen_ten_inch_2
+# Screenshots via Fastlane (requires device); each lane grabs a light (1.png) and dark (2.png) shot
+fastlane android grab_screen_phone
+fastlane android grab_screen_seven_inch
+fastlane android grab_screen_ten_inch
 ```
 
 Fastlane release builds require env vars: `KEYSTORE_FILE`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`.

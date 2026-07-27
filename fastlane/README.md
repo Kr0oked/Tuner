@@ -39,53 +39,29 @@ Build a new APK
 
 Deploy a new version to the Google Play
 
-### android grab_screen_phone_1
+### android grab_screen_phone
 
 ```sh
-[bundle exec] fastlane android grab_screen_phone_1
+[bundle exec] fastlane android grab_screen_phone
 ```
 
-Grab phone screenshot 1
+Grab phone screenshots
 
-### android grab_screen_phone_2
+### android grab_screen_seven_inch
 
 ```sh
-[bundle exec] fastlane android grab_screen_phone_2
+[bundle exec] fastlane android grab_screen_seven_inch
 ```
 
-Grab phone screenshot 2
+Grab seven inch screenshots
 
-### android grab_screen_seven_inch_1
+### android grab_screen_ten_inch
 
 ```sh
-[bundle exec] fastlane android grab_screen_seven_inch_1
+[bundle exec] fastlane android grab_screen_ten_inch
 ```
 
-Grab seven inch screenshot 1
-
-### android grab_screen_seven_inch_2
-
-```sh
-[bundle exec] fastlane android grab_screen_seven_inch_2
-```
-
-Grab seven inch screenshot 2
-
-### android grab_screen_ten_inch_1
-
-```sh
-[bundle exec] fastlane android grab_screen_ten_inch_1
-```
-
-Grab ten inch screenshot 1
-
-### android grab_screen_ten_inch_2
-
-```sh
-[bundle exec] fastlane android grab_screen_ten_inch_2
-```
-
-Grab ten inch screenshot 2
+Grab ten inch screenshots
 
 ----
 

@@ -21,8 +21,9 @@ package com.bobek.tuner.screengrab
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.platform.app.InstrumentationRegistry
+import com.bobek.tuner.data.AppNightMode
 import com.bobek.tuner.domain.DetectedNote
+import com.bobek.tuner.ui.ComposeAppViewModel
 import com.bobek.tuner.ui.MainContent
 import com.bobek.tuner.ui.tuner.ComposeTunerViewModel
 import com.bobek.tuner.ui.tuner.TunerState
@@ -34,6 +35,7 @@ import org.junit.runner.RunWith
 import tools.fastlane.screengrab.Screengrab
 import tools.fastlane.screengrab.UiAutomatorScreenshotStrategy
 import tools.fastlane.screengrab.cleanstatusbar.CleanStatusBar
+import tools.fastlane.screengrab.cleanstatusbar.IconVisibility
 import tools.fastlane.screengrab.locale.LocaleTestRule
 
 @LargeTest
@@ -49,13 +51,13 @@ class ScreengrabTest {
 
     @Test
     fun grabScreenshot() {
-        val screenshotName = InstrumentationRegistry.getArguments()
-            .getString("screenshotName", "default")
-
         Screengrab.setDefaultScreenshotStrategy(UiAutomatorScreenshotStrategy())
+
+        val appViewModel = ComposeAppViewModel(AppNightMode.NO)
 
         composeTestRule.setContent {
             MainContent(
+                appViewModel = appViewModel,
                 tunerViewModel = ComposeTunerViewModel(
                     TunerState.Listening(
                         DetectedNote(name = "A", octave = 4, frequency = 440.0f, cents = 0)
@@ -64,8 +66,13 @@ class ScreengrabTest {
             )
         }
         composeTestRule.waitForIdle()
+        enableCleanStatusBar()
+        Screengrab.screenshot("1")
 
-        Screengrab.screenshot(screenshotName)
+        appViewModel.setNightMode(AppNightMode.YES)
+        composeTestRule.waitForIdle()
+        enableCleanStatusBar()
+        Screengrab.screenshot("2")
     }
 
     companion object {
@@ -73,13 +80,24 @@ class ScreengrabTest {
         @BeforeClass
         @JvmStatic
         fun beforeAll() {
-            CleanStatusBar.enableWithDefaults()
+            enableCleanStatusBar()
         }
 
         @AfterClass
         @JvmStatic
         fun afterAll() {
             CleanStatusBar.disable()
+        }
+
+        /**
+         * The mobile network icon doesn't reliably respect the app's light/dark status bar
+         * appearance on all system images, sometimes rendering white regardless of theme.
+         * Hiding it avoids that inconsistency instead of chasing it.
+         */
+        private fun enableCleanStatusBar() {
+            CleanStatusBar()
+                .setMobileNetworkVisibility(IconVisibility.HIDE)
+                .enable()
         }
     }
 }
