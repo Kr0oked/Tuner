@@ -5,8 +5,22 @@ app_apk_path('app/build/outputs/apk/debug/app-debug.apk')
 tests_apk_path('app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk')
 
 locales([
+  'ar',
   'de-DE',
-  'en-US'
+  'en-US',
+  'es-ES',
+  'fr-FR',
+  'hi-IN',
+  'it-IT',
+  'ja-JP',
+  'ko-KR',
+  'nl-NL',
+  'pl-PL',
+  'pt-BR',
+  'ru-RU',
+  'tr-TR',
+  'uk',
+  'zh-CN'
 ])
 
 use_timestamp_suffix(false)
