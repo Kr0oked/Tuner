@@ -63,6 +63,14 @@ Grab seven inch screenshots
 
 Grab ten inch screenshots
 
+### android grab_screens
+
+```sh
+[bundle exec] fastlane android grab_screens
+```
+
+Grab all screenshots, booting each screenshot emulator in turn
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

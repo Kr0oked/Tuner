@@ -25,8 +25,9 @@ fastlane android apk
 # Run lint
 ./gradlew lint
 
-# Screenshots via Fastlane (requires device); each lane grabs a light (1.png) and dark (2.png) shot
-fastlane android grab_screen_phone
+# Screenshots via Fastlane; each lane grabs a light (1.png) and dark (2.png) shot
+fastlane android grab_screens          # boots each Screenshots_* emulator in turn and grabs all device types
+fastlane android grab_screen_phone     # requires a connected/already-running device
 fastlane android grab_screen_seven_inch
 fastlane android grab_screen_ten_inch
 ```

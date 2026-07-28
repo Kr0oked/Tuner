@@ -1,5 +1,15 @@
 default_platform(:android)
 
+ANDROID_SDK_ROOT_PATH = ENV["ANDROID_SDK_ROOT"] || ENV["ANDROID_HOME"] || File.expand_path("~/Android/Sdk")
+EMULATOR_BIN = File.join(ANDROID_SDK_ROOT_PATH, "emulator", "emulator")
+ADB_BIN = File.join(ANDROID_SDK_ROOT_PATH, "platform-tools", "adb")
+
+SCREENSHOT_EMULATORS = [
+  { avd: "Screenshots_Phone", port: 5554, device_type: "phone" },
+  { avd: "Screenshots_SevenInch", port: 5556, device_type: "sevenInch" },
+  { avd: "Screenshots_TenInch", port: 5558, device_type: "tenInch" }
+].map { |device| device.merge(serial: "emulator-#{device[:port]}") }.freeze
+
 platform :android do
   desc "Runs all the tests"
   lane :test do
@@ -42,23 +52,55 @@ platform :android do
 
   desc "Grab phone screenshots"
   lane :grab_screen_phone do
-   gradle(task: 'assemble', build_type: 'Debug')
-   gradle(task: 'assemble', build_type: 'AndroidTest')
-   screengrab(device_type: 'phone', clear_previous_screenshots: true)
+    capture_device_screenshots(device_type: "phone")
   end
 
   desc "Grab seven inch screenshots"
   lane :grab_screen_seven_inch do
-   gradle(task: 'assemble', build_type: 'Debug')
-   gradle(task: 'assemble', build_type: 'AndroidTest')
-   screengrab(device_type: 'sevenInch', clear_previous_screenshots: true)
+    capture_device_screenshots(device_type: "sevenInch")
   end
 
   desc "Grab ten inch screenshots"
   lane :grab_screen_ten_inch do
-   gradle(task: 'assemble', build_type: 'Debug')
-   gradle(task: 'assemble', build_type: 'AndroidTest')
-   screengrab(device_type: 'tenInch', clear_previous_screenshots: true)
+    capture_device_screenshots(device_type: "tenInch")
+  end
+
+  desc "Grab all screenshots, booting each screenshot emulator in turn"
+  lane :grab_screens do
+    SCREENSHOT_EMULATORS.each do |emulator|
+      boot_screenshot_emulator(emulator)
+      capture_device_screenshots(device_type: emulator[:device_type], specific_device: emulator[:serial])
+      shutdown_screenshot_emulator(emulator)
+    end
+  end
+
+  private_lane :capture_device_screenshots do |options|
+    gradle(task: "assemble", build_type: "Debug")
+    gradle(task: "assemble", build_type: "AndroidTest")
+    screengrab(
+      device_type: options[:device_type],
+      specific_device: options[:specific_device],
+      clear_previous_screenshots: true
+    )
+  end
+
+  private_lane :boot_screenshot_emulator do |options|
+    serial = options[:serial]
+    UI.message("Booting #{options[:avd]} (#{serial})...")
+    sh("nohup \"#{EMULATOR_BIN}\" -avd #{options[:avd]} -port #{options[:port]} " \
+       "-no-snapshot-save > /tmp/#{options[:avd]}-emulator.log 2>&1 &")
+    sh("\"#{ADB_BIN}\" -s #{serial} wait-for-device")
+    sh("while [ \"$(\"#{ADB_BIN}\" -s #{serial} shell getprop sys.boot_completed | tr -d '\\r')\" != \"1\" ]; do sleep 2; done")
+    sh("while [ \"$(\"#{ADB_BIN}\" -s #{serial} shell getprop init.svc.bootanim | tr -d '\\r')\" != \"stopped\" ]; do sleep 2; done")
+    sh("\"#{ADB_BIN}\" -s #{serial} shell input keyevent KEYCODE_WAKEUP")
+    sh("\"#{ADB_BIN}\" -s #{serial} shell wm dismiss-keyguard")
+  end
+
+  private_lane :shutdown_screenshot_emulator do |options|
+    serial = options[:serial]
+    UI.message("Shutting down #{serial}...")
+    sh("\"#{ADB_BIN}\" -s #{serial} emu kill || true")
+    sh("while \"#{ADB_BIN}\" devices | grep -q \"#{serial}\"; do sleep 1; done")
   end
 
 end
