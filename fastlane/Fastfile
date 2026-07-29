@@ -6,7 +6,9 @@ ADB_BIN = File.join(ANDROID_SDK_ROOT_PATH, "platform-tools", "adb")
 AVDMANAGER_BIN = File.join(ANDROID_SDK_ROOT_PATH, "cmdline-tools", "latest", "bin", "avdmanager")
 SDKMANAGER_BIN = File.join(ANDROID_SDK_ROOT_PATH, "cmdline-tools", "latest", "bin", "sdkmanager")
 SCREENSHOT_BASE_DEVICE = "pixel"
-SCREENSHOT_SYSTEM_IMAGE = "system-images;android-36.1;google_apis;x86_64"
+SCREENSHOT_SYSTEM_IMAGE = "system-images;android-37.0;google_apis;x86_64"
+# Android 17 (API 37) emulators require at least 4GB of RAM.
+SCREENSHOT_RAM_SIZE_MB = 4096
 
 SCREENSHOT_EMULATORS = [
   { avd: "Screenshots_Phone", port: 5554, device_type: "phone", lcd_width: 1080, lcd_height: 1920, lcd_density: 480 },
@@ -117,6 +119,7 @@ platform :android do
          "-e 's/^hw.lcd.width=.*/hw.lcd.width=#{options[:lcd_width]}/' " \
          "-e 's/^hw.lcd.height=.*/hw.lcd.height=#{options[:lcd_height]}/' " \
          "-e 's/^hw.lcd.density=.*/hw.lcd.density=#{options[:lcd_density]}/' " \
+         "-e 's/^hw.ramSize=.*/hw.ramSize=#{SCREENSHOT_RAM_SIZE_MB}/' " \
          "\"#{config_path}\"")
     end
   end
