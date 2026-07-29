@@ -71,6 +71,14 @@ Grab ten inch screenshots
 
 Grab all screenshots, booting each screenshot emulator in turn
 
+### android setup_screenshot_emulators
+
+```sh
+[bundle exec] fastlane android setup_screenshot_emulators
+```
+
+Create the Screenshots_* AVDs on this machine if they don't already exist
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
