@@ -5,10 +5,10 @@ EMULATOR_BIN = File.join(ANDROID_SDK_ROOT_PATH, "emulator", "emulator")
 ADB_BIN = File.join(ANDROID_SDK_ROOT_PATH, "platform-tools", "adb")
 AVDMANAGER_BIN = File.join(ANDROID_SDK_ROOT_PATH, "cmdline-tools", "latest", "bin", "avdmanager")
 SDKMANAGER_BIN = File.join(ANDROID_SDK_ROOT_PATH, "cmdline-tools", "latest", "bin", "sdkmanager")
-SCREENSHOT_BASE_DEVICE = "pixel"
-SCREENSHOT_SYSTEM_IMAGE = "system-images;android-37.0;google_apis;x86_64"
+AVD_BASE_DEVICE = "pixel"
+AVD_SYSTEM_IMAGE = "system-images;android-37.0;google_apis;x86_64"
 # Android 17 (API 37) emulators require at least 4GB of RAM.
-SCREENSHOT_RAM_SIZE_MB = 4096
+AVD_RAM_SIZE_MB = 4096
 
 SCREENSHOT_EMULATORS = [
   { avd: "Screenshots_Phone", port: 5554, device_type: "phone", lcd_width: 1080, lcd_height: 1920, lcd_density: 480 },
@@ -16,11 +16,22 @@ SCREENSHOT_EMULATORS = [
   { avd: "Screenshots_TenInch", port: 5558, device_type: "tenInch", lcd_width: 2160, lcd_height: 3840, lcd_density: 480 }
 ].map { |device| device.merge(serial: "emulator-#{device[:port]}") }.freeze
 
+TEST_EMULATOR = { avd: "Test_Phone", port: 5560, serial: "emulator-5560" }.freeze
+
 platform :android do
   desc "Runs all the tests"
   lane :test do
     gradle(task: "test")
-    gradle(task: "connectedAndroidTest")
+
+    ensure_sdk_command_line_tools_available
+    ensure_system_image_installed
+    create_avd_if_missing(TEST_EMULATOR)
+    boot_emulator(TEST_EMULATOR)
+    begin
+      gradle(task: "connectedAndroidTest")
+    ensure
+      shutdown_emulator(TEST_EMULATOR)
+    end
   end
 
   desc "Build a new APK"
@@ -75,17 +86,20 @@ platform :android do
   lane :grab_screens do
     setup_screenshot_emulators
     SCREENSHOT_EMULATORS.each do |emulator|
-      boot_screenshot_emulator(emulator)
-      capture_device_screenshots(device_type: emulator[:device_type], specific_device: emulator[:serial])
-      shutdown_screenshot_emulator(emulator)
+      boot_emulator(emulator)
+      begin
+        capture_device_screenshots(device_type: emulator[:device_type], specific_device: emulator[:serial])
+      ensure
+        shutdown_emulator(emulator)
+      end
     end
   end
 
   desc "Create the Screenshots_* AVDs on this machine if they don't already exist"
   lane :setup_screenshot_emulators do
     ensure_sdk_command_line_tools_available
-    ensure_screenshot_system_image_installed
-    SCREENSHOT_EMULATORS.each { |emulator| create_screenshot_avd_if_missing(emulator) }
+    ensure_system_image_installed
+    SCREENSHOT_EMULATORS.each { |emulator| create_avd_if_missing(emulator) }
   end
 
   private_lane :ensure_sdk_command_line_tools_available do
@@ -98,29 +112,28 @@ platform :android do
     end
   end
 
-  private_lane :ensure_screenshot_system_image_installed do
-    image_dir = File.join(ANDROID_SDK_ROOT_PATH, *SCREENSHOT_SYSTEM_IMAGE.split(";"))
+  private_lane :ensure_system_image_installed do
+    image_dir = File.join(ANDROID_SDK_ROOT_PATH, *AVD_SYSTEM_IMAGE.split(";"))
     unless Dir.exist?(image_dir)
-      UI.message("System image #{SCREENSHOT_SYSTEM_IMAGE} not found, installing...")
+      UI.message("System image #{AVD_SYSTEM_IMAGE} not found, installing...")
       sh("yes | \"#{SDKMANAGER_BIN}\" --licenses > /dev/null")
-      sh("\"#{SDKMANAGER_BIN}\" --install \"#{SCREENSHOT_SYSTEM_IMAGE}\"")
+      sh("\"#{SDKMANAGER_BIN}\" --install \"#{AVD_SYSTEM_IMAGE}\"")
     end
   end
 
-  private_lane :create_screenshot_avd_if_missing do |options|
+  private_lane :create_avd_if_missing do |options|
     avd_dir = File.join(Dir.home, ".android", "avd", "#{options[:avd]}.avd")
     unless Dir.exist?(avd_dir)
       UI.message("Creating AVD #{options[:avd]}...")
       sh("echo no | \"#{AVDMANAGER_BIN}\" create avd " \
-         "-n #{options[:avd]} -k \"#{SCREENSHOT_SYSTEM_IMAGE}\" -d #{SCREENSHOT_BASE_DEVICE} --force")
+         "-n #{options[:avd]} -k \"#{AVD_SYSTEM_IMAGE}\" -d #{AVD_BASE_DEVICE} --force")
 
       config_path = File.join(avd_dir, "config.ini")
-      sh("sed -i " \
-         "-e 's/^hw.lcd.width=.*/hw.lcd.width=#{options[:lcd_width]}/' " \
-         "-e 's/^hw.lcd.height=.*/hw.lcd.height=#{options[:lcd_height]}/' " \
-         "-e 's/^hw.lcd.density=.*/hw.lcd.density=#{options[:lcd_density]}/' " \
-         "-e 's/^hw.ramSize=.*/hw.ramSize=#{SCREENSHOT_RAM_SIZE_MB}/' " \
-         "\"#{config_path}\"")
+      sed_edits = ["-e 's/^hw.ramSize=.*/hw.ramSize=#{AVD_RAM_SIZE_MB}/'"]
+      sed_edits << "-e 's/^hw.lcd.width=.*/hw.lcd.width=#{options[:lcd_width]}/'" if options[:lcd_width]
+      sed_edits << "-e 's/^hw.lcd.height=.*/hw.lcd.height=#{options[:lcd_height]}/'" if options[:lcd_height]
+      sed_edits << "-e 's/^hw.lcd.density=.*/hw.lcd.density=#{options[:lcd_density]}/'" if options[:lcd_density]
+      sh("sed -i #{sed_edits.join(' ')} \"#{config_path}\"")
     end
   end
 
@@ -134,7 +147,7 @@ platform :android do
     )
   end
 
-  private_lane :boot_screenshot_emulator do |options|
+  private_lane :boot_emulator do |options|
     serial = options[:serial]
     UI.message("Booting #{options[:avd]} (#{serial})...")
     sh("nohup \"#{EMULATOR_BIN}\" -avd #{options[:avd]} -port #{options[:port]} " \
@@ -146,7 +159,7 @@ platform :android do
     sh("\"#{ADB_BIN}\" -s #{serial} shell wm dismiss-keyguard")
   end
 
-  private_lane :shutdown_screenshot_emulator do |options|
+  private_lane :shutdown_emulator do |options|
     serial = options[:serial]
     UI.message("Shutting down #{serial}...")
     sh("\"#{ADB_BIN}\" -s #{serial} emu kill || true")
