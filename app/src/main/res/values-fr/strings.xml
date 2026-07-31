@@ -33,7 +33,7 @@
     <string name="author">Auteur</string>
     <string name="license">Licence</string>
     <string name="third_party_licenses">Licences tierces</string>
-    <string name="third_party_licenses_summary">Licences des bibliothèques open source incluses</string>
+    <string name="third_party_licenses_summary">Licences des bibliothèques open source utilisées dans cette application.</string>
     <string name="source_code">Code source</string>
     <string name="version">Version</string>
 </resources>

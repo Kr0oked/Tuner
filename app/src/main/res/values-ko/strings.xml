@@ -33,7 +33,7 @@
     <string name="author">제작자</string>
     <string name="license">라이선스</string>
     <string name="third_party_licenses">타사 라이선스</string>
-    <string name="third_party_licenses_summary">포함된 오픈 소스 라이브러리의 라이선스</string>
+    <string name="third_party_licenses_summary">이 앱에서 사용하는 오픈 소스 라이브러리의 라이선스.</string>
     <string name="source_code">소스 코드</string>
     <string name="version">버전</string>
 </resources>

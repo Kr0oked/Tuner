@@ -33,7 +33,7 @@
     <string name="author">Автор</string>
     <string name="license">Ліцензія</string>
     <string name="third_party_licenses">Ліцензії сторонніх бібліотек</string>
-    <string name="third_party_licenses_summary">Ліцензії включених бібліотек з відкритим кодом</string>
+    <string name="third_party_licenses_summary">Ліцензії бібліотек з відкритим кодом, які використовуються в цьому додатку.</string>
     <string name="source_code">Вихідний код</string>
     <string name="version">Версія</string>
 </resources>

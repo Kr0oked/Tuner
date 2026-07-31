@@ -33,7 +33,7 @@
     <string name="author">लेखक</string>
     <string name="license">लाइसेंस</string>
     <string name="third_party_licenses">तृतीय-पक्ष लाइसेंस</string>
-    <string name="third_party_licenses_summary">शामिल ओपन सोर्स लाइब्रेरी के लाइसेंस</string>
+    <string name="third_party_licenses_summary">इस ऐप में उपयोग की गई ओपन सोर्स लाइब्रेरी के लाइसेंस।</string>
     <string name="source_code">स्रोत कोड</string>
     <string name="version">संस्करण</string>
 </resources>

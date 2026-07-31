@@ -33,7 +33,7 @@
     <string name="author">Автор</string>
     <string name="license">Лицензия</string>
     <string name="third_party_licenses">Лицензии сторонних библиотек</string>
-    <string name="third_party_licenses_summary">Лицензии используемых библиотек с открытым исходным кодом</string>
+    <string name="third_party_licenses_summary">Лицензии используемых в этом приложении библиотек с открытым исходным кодом.</string>
     <string name="source_code">Исходный код</string>
     <string name="version">Версия</string>
 </resources>

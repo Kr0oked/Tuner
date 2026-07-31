@@ -33,7 +33,7 @@
     <string name="author">作者</string>
     <string name="license">许可证</string>
     <string name="third_party_licenses">第三方许可证</string>
-    <string name="third_party_licenses_summary">所包含开源库的许可证</string>
+    <string name="third_party_licenses_summary">本应用使用的开源库的许可证。</string>
     <string name="source_code">源代码</string>
     <string name="version">版本</string>
 </resources>

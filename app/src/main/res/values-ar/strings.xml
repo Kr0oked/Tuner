@@ -33,7 +33,7 @@
     <string name="author">المؤلف</string>
     <string name="license">الترخيص</string>
     <string name="third_party_licenses">تراخيص الجهات الخارجية</string>
-    <string name="third_party_licenses_summary">تراخيص مكتبات المصدر المفتوح المضمنة</string>
+    <string name="third_party_licenses_summary">تراخيص مكتبات المصدر المفتوح المستخدمة في هذا التطبيق.</string>
     <string name="source_code">الكود المصدري</string>
     <string name="version">الإصدار</string>
 </resources>
