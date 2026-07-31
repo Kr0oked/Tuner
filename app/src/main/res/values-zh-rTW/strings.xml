@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ This file is part of Tuner.
+  ~ Copyright (C) 2026 Philipp Bobek <philipp.bobek@mailbox.org>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Tuner is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="tuner">調音器</string>
+    <string name="tuner_permission_rationale">需要麥克風權限才能偵測樂器的音高。</string>
+    <string name="tuner_grant_permission">授予權限</string>
+    <string name="tuner_listening">正在監聽…</string>
+    <string name="settings">設定</string>
+    <string name="display">顯示</string>
+    <string name="night_mode">主題</string>
+    <string name="night_mode_follow_system">跟隨系統</string>
+    <string name="night_mode_no">淺色</string>
+    <string name="night_mode_yes">深色</string>
+    <string name="about">關於</string>
+    <string name="author">作者</string>
+    <string name="license">授權</string>
+    <string name="third_party_licenses">第三方授權</string>
+    <string name="third_party_licenses_summary">所包含開源函式庫的授權</string>
+    <string name="source_code">原始碼</string>
+    <string name="version">版本</string>
+</resources>
