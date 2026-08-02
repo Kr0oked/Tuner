@@ -159,9 +159,11 @@ class InstrumentedTest {
     private fun onNightModeOption(@StringRes labelResId: Int): SemanticsNodeInteraction =
         composeTestRule.onNodeWithText(getString(labelResId))
 
+    @Suppress("SameParameterValue")
     private fun onListItem(text: String): SemanticsNodeInteraction =
         composeTestRule.onNodeWithText(text)
 
+    @Suppress("SameParameterValue")
     private fun scrollToListItem(text: String) {
         composeTestRule.onNode(hasScrollToNodeAction()).performScrollToNode(hasText(text))
     }
