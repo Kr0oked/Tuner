@@ -276,6 +276,7 @@ private const val MAX_CENTS = 50f
 private const val TOTAL_BARS = 17
 private const val MIN_HEIGHT_FRACTION = 0.28f
 private const val MIN_WIDTH_FRACTION = 0.5f
+private const val DIM_ALPHA = 0.22f
 
 @Composable
 private fun CentsBarMeter(cents: Int?, modifier: Modifier = Modifier) {
@@ -289,7 +290,6 @@ private fun CentsBarMeter(cents: Int?, modifier: Modifier = Modifier) {
     val inTuneColor = MaterialTheme.colorScheme.primary
     val warnColor = MaterialTheme.colorScheme.tertiary
     val outOfTuneColor = MaterialTheme.colorScheme.error
-    val dimAlpha = 0.22f
 
     Canvas(modifier = modifier) {
         val centerIndex = TOTAL_BARS / 2
@@ -315,7 +315,7 @@ private fun CentsBarMeter(cents: Int?, modifier: Modifier = Modifier) {
             }
             val litFraction = if (hasNote) (1f - abs(i - activePosition) / 1.2f).coerceIn(0f, 1f) else 0f
 
-            drawGlowingBar(x, centerY, barWidth, barHeight, zoneColor, dimAlpha, litFraction)
+            drawGlowingBar(x, centerY, barWidth, barHeight, zoneColor, litFraction)
 
             x += barWidth + gap
         }
@@ -328,10 +328,9 @@ private fun DrawScope.drawGlowingBar(
     barWidth: Float,
     barHeight: Float,
     zoneColor: Color,
-    dimAlpha: Float,
     litFraction: Float
 ) {
-    val alpha = dimAlpha + (1f - dimAlpha) * litFraction
+    val alpha = DIM_ALPHA + (1f - DIM_ALPHA) * litFraction
     val cornerRadius = CornerRadius(barWidth / 2.5f)
 
     if (litFraction > 0.05f) {

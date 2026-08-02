@@ -42,18 +42,18 @@ class DetectedNoteTest {
 
     @Test
     fun fromFrequencyRecognizesNoteAtOctaveBoundary() {
-        val belowC = DetectedNote.fromFrequency(246.941651f)
+        val belowC = DetectedNote.fromFrequency(246.9417f)
         assertEquals("B", belowC.name)
         assertEquals(3, belowC.octave)
 
-        val atC = DetectedNote.fromFrequency(261.625565f)
+        val atC = DetectedNote.fromFrequency(261.6256f)
         assertEquals("C", atC.name)
         assertEquals(4, atC.octave)
     }
 
     @Test
     fun fromFrequencyRecognizesLowestNote() {
-        val note = DetectedNote.fromFrequency(16.351597f)
+        val note = DetectedNote.fromFrequency(16.3516f)
         assertEquals("C", note.name)
         assertEquals(0, note.octave)
         assertEquals(0, note.cents)
