@@ -1,1 +1,6 @@
-- TODO
+Pierwsze wydanie Tuner!
+
+* Tuner chromatyczny z automatycznym wykrywaniem nut
+* Precyzyjne wykrywanie wysokości dźwięku co do centa
+* Jasny i ciemny motyw
+* Brak reklam, brak trackerów, brak zbędnych uprawnień

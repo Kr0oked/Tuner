@@ -1,1 +1,6 @@
-- TODO
+Prima versione di Tuner!
+
+* Accordatore cromatico con rilevamento automatico delle note
+* Rilevamento preciso dell'intonazione, fino al cent
+* Tema chiaro e scuro
+* Nessuna pubblicità, nessun tracciamento, nessun permesso superfluo

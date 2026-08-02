@@ -1,1 +1,6 @@
-- TODO
+Erste Veröffentlichung von Tuner!
+
+* Chromatisches Stimmgerät mit automatischer Tonerkennung
+* Präzise Tonhöhenerkennung auf das Cent genau
+* Light und Dark Theme
+* Keine Werbung, keine Tracker, keine unnötigen Berechtigungen

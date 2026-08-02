@@ -1,1 +1,6 @@
-- TODO
+¡Primera versión de Tuner!
+
+* Afinador cromático con detección automática de notas
+* Detección precisa de tono, hasta el cent
+* Tema claro y oscuro
+* Sin publicidad, sin rastreadores, sin permisos innecesarios

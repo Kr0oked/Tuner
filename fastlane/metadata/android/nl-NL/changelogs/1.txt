@@ -1,1 +1,6 @@
-- TODO
+Eerste release van Tuner!
+
+* Chromatisch stemapparaat met automatische nootdetectie
+* Nauwkeurige toonhoogtedetectie tot op de cent
+* Licht en donker thema
+* Geen advertenties, geen trackers, geen onnodige machtigingen

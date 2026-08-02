@@ -1,1 +1,6 @@
-- TODO
+First release of Tuner!
+
+* Chromatic tuner with automatic note detection
+* Precise pitch detection down to the cent
+* Light and Dark theme
+* No advertisements, trackers, or unnecessary permissions

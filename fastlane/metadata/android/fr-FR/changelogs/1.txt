@@ -1,1 +1,6 @@
-- TODO
+Première version de Tuner !
+
+* Accordeur chromatique avec détection automatique des notes
+* Détection précise de la hauteur, au cent près
+* Thème clair et sombre
+* Sans publicité, sans traceurs, sans permissions inutiles
