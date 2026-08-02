@@ -53,12 +53,13 @@ interface ITunerViewModel {
     fun stopListening()
 }
 
-private const val SAMPLE_RATE = 44100
-private const val ANALYSIS_SIZE = 4096
-private const val FREQUENCY_SMOOTHING_ALPHA = 0.3f
-private const val NOTE_CONFIRMATION_FRAMES = 3
-private const val ONSET_ENERGY_RATIO = 2.5f
-private const val ONSET_MIN_RMS = 0.01f
+// internal (not private) so tests can reuse these production constants instead of a duplicated copy.
+internal const val SAMPLE_RATE = 44100
+internal const val ANALYSIS_SIZE = 4096
+internal const val FREQUENCY_SMOOTHING_ALPHA = 0.7f
+internal const val NOTE_CONFIRMATION_FRAMES = 3
+internal const val ONSET_ENERGY_RATIO = 2.5f
+internal const val ONSET_MIN_RMS = 0.01f
 
 @HiltViewModel
 class TunerViewModel @Inject constructor() : ViewModel(), ITunerViewModel {
