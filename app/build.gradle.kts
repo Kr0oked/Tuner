@@ -121,3 +121,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
+
+// Baseline profile generation is non-deterministic across build environments,
+// which breaks F-Droid's reproducible-build verification against our release APK.
+tasks.whenTaskAdded {
+    if (name.contains("ArtProfile")) {
+        enabled = false
+    }
+}
