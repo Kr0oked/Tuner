@@ -1,0 +1,3 @@
+Versión de mantenimiento sin cambios visibles para el usuario:
+
+* Correcciones en la configuración de compilación para admitir compilaciones reproducibles en F-Droid

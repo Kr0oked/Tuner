@@ -1,0 +1,3 @@
+Kullanıcıyı etkileyen bir değişiklik içermeyen bakım sürümü:
+
+* F-Droid üzerinde yeniden üretilebilir derlemeleri desteklemek için derleme yapılandırması düzeltmeleri

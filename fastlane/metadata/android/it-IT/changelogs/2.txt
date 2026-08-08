@@ -1,0 +1,3 @@
+Versione di manutenzione senza modifiche visibili per l'utente:
+
+* Correzioni alla configurazione di build per supportare build riproducibili su F-Droid

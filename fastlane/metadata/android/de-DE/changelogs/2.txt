@@ -1,0 +1,3 @@
+Wartungs-Release ohne sichtbare Änderungen für Nutzer:
+
+* Build-Konfigurationsanpassungen zur Unterstützung reproduzierbarer Builds auf F-Droid

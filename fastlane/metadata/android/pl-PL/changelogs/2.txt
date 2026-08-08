@@ -1,0 +1,3 @@
+Wydanie konserwacyjne bez zmian widocznych dla użytkownika:
+
+* Poprawki konfiguracji builda wspierające odtwarzalne buildy na F-Droid

@@ -1,0 +1,3 @@
+Maintenance release with no user-facing changes:
+
+* Build configuration fixes to support reproducible builds on F-Droid

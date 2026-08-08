@@ -1,0 +1,3 @@
+Onderhoudsrelease zonder zichtbare wijzigingen voor gebruikers:
+
+* Buildconfiguratie aangepast ter ondersteuning van reproduceerbare builds op F-Droid
