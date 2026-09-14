@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">楽器の音程を検出するにはマイクへのアクセスが必要です。</string>
     <string name="tuner_grant_permission">権限を許可</string>
     <string name="tuner_listening">聴き取り中…</string>
+    <string name="navigate_back">戻る</string>
     <string name="settings">設定</string>
     <string name="display">画面表示</string>
     <string name="night_mode">テーマ</string>

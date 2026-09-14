@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">Microfoontoegang is vereist om de toonhoogte van je instrument te detecteren.</string>
     <string name="tuner_grant_permission">Toestemming verlenen</string>
     <string name="tuner_listening">Luisteren…</string>
+    <string name="navigate_back">Terug</string>
     <string name="settings">Instellingen</string>
     <string name="display">Scherm</string>
     <string name="night_mode">Thema</string>

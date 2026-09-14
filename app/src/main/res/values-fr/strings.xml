@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">L\'accès au microphone est nécessaire pour détecter la hauteur de votre instrument.</string>
     <string name="tuner_grant_permission">Autoriser l\'accès</string>
     <string name="tuner_listening">Écoute…</string>
+    <string name="navigate_back">Retour</string>
     <string name="settings">Paramètres</string>
     <string name="display">Affichage</string>
     <string name="night_mode">Thème</string>

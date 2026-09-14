@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">需要麦克风权限才能检测乐器的音高。</string>
     <string name="tuner_grant_permission">授予权限</string>
     <string name="tuner_listening">正在监听…</string>
+    <string name="navigate_back">返回</string>
     <string name="settings">设置</string>
     <string name="display">显示</string>
     <string name="night_mode">主题</string>

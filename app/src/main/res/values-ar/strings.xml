@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">يلزم الوصول إلى الميكروفون لاكتشاف طبقة صوت آلتك الموسيقية.</string>
     <string name="tuner_grant_permission">منح الإذن</string>
     <string name="tuner_listening">الاستماع…</string>
+    <string name="navigate_back">الرجوع للخلف</string>
     <string name="settings">الإعدادات</string>
     <string name="display">العرض</string>
     <string name="night_mode">المظهر</string>

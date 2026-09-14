@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">Enstrümanınızın perdesini algılamak için mikrofon erişimi gereklidir.</string>
     <string name="tuner_grant_permission">İzin ver</string>
     <string name="tuner_listening">Dinleniyor…</string>
+    <string name="navigate_back">Geri</string>
     <string name="settings">Ayarlar</string>
     <string name="display">Görünüm</string>
     <string name="night_mode">Tema</string>

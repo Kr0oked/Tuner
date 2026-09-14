@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">Доступ до мікрофона потрібен для визначення висоти звуку вашого інструмента.</string>
     <string name="tuner_grant_permission">Надати дозвіл</string>
     <string name="tuner_listening">Прослуховування…</string>
+    <string name="navigate_back">Назад</string>
     <string name="settings">Налаштування</string>
     <string name="display">Екран</string>
     <string name="night_mode">Тема</string>

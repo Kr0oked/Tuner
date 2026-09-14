@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">O acesso ao microfone é necessário para detectar o tom do seu instrumento.</string>
     <string name="tuner_grant_permission">Conceder permissão</string>
     <string name="tuner_listening">Ouvindo…</string>
+    <string name="navigate_back">Voltar</string>
     <string name="settings">Configurações</string>
     <string name="display">Tela</string>
     <string name="night_mode">Tema</string>

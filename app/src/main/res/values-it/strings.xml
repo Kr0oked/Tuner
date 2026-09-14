@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">È necessario l\'accesso al microfono per rilevare l\'intonazione del tuo strumento.</string>
     <string name="tuner_grant_permission">Concedi permesso</string>
     <string name="tuner_listening">In ascolto…</string>
+    <string name="navigate_back">Indietro</string>
     <string name="settings">Impostazioni</string>
     <string name="display">Schermo</string>
     <string name="night_mode">Tema</string>

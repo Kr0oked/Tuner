@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">악기의 음높이를 감지하려면 마이크 접근 권한이 필요합니다.</string>
     <string name="tuner_grant_permission">권한 허용</string>
     <string name="tuner_listening">듣는 중…</string>
+    <string name="navigate_back">뒤로</string>
     <string name="settings">설정</string>
     <string name="display">화면</string>
     <string name="night_mode">테마</string>

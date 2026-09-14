@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">आपके वाद्ययंत्र की पिच का पता लगाने के लिए माइक्रोफ़ोन एक्सेस आवश्यक है।</string>
     <string name="tuner_grant_permission">अनुमति दें</string>
     <string name="tuner_listening">सुन रहा है…</string>
+    <string name="navigate_back">वापस जाएं</string>
     <string name="settings">सेटिंग्स</string>
     <string name="display">डिस्प्ले</string>
     <string name="night_mode">थीम</string>

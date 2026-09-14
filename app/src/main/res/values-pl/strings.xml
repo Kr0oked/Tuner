@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">Dostęp do mikrofonu jest wymagany do wykrycia wysokości dźwięku Twojego instrumentu.</string>
     <string name="tuner_grant_permission">Przyznaj uprawnienie</string>
     <string name="tuner_listening">Nasłuchiwanie…</string>
+    <string name="navigate_back">Wstecz</string>
     <string name="settings">Ustawienia</string>
     <string name="display">Wyświetlacz</string>
     <string name="night_mode">Motyw</string>

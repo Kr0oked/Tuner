@@ -23,6 +23,7 @@
     <string name="tuner_permission_rationale">Mikrofonzugriff wird benötigt, um die Tonhöhe deines Instruments zu erkennen.</string>
     <string name="tuner_grant_permission">Zugriff erlauben</string>
     <string name="tuner_listening">Höre zu…</string>
+    <string name="navigate_back">Zurück</string>
     <string name="settings">Einstellungen</string>
     <string name="display">Anzeige</string>
     <string name="night_mode">Design</string>
