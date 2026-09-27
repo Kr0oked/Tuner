@@ -25,6 +25,10 @@
     <string name="tuner_listening">Nasłuchiwanie…</string>
     <string name="navigate_back">Wstecz</string>
     <string name="settings">Ustawienia</string>
+    <string name="reference_pitch">Strój kameralny</string>
+    <string name="reference_pitch_display">Strój: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">Przywróć domyślne</string>
     <string name="display">Wyświetlacz</string>
     <string name="night_mode">Motyw</string>
     <string name="night_mode_follow_system">Zgodnie z systemem</string>

@@ -25,6 +25,10 @@
     <string name="tuner_listening">Höre zu…</string>
     <string name="navigate_back">Zurück</string>
     <string name="settings">Einstellungen</string>
+    <string name="reference_pitch">Kammerton</string>
+    <string name="reference_pitch_display">Kammerton: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">Auf Standard zurücksetzen</string>
     <string name="display">Anzeige</string>
     <string name="night_mode">Design</string>
     <string name="night_mode_follow_system">Systemstandard</string>

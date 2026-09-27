@@ -20,6 +20,7 @@ package com.bobek.tuner.settings
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import com.bobek.tuner.data.AppNightMode
+import com.bobek.tuner.domain.DEFAULT_REFERENCE_PITCH
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
@@ -67,5 +68,18 @@ class DataStoreSettingsRepositoryTest {
             repo.setNightMode(nightMode)
             assertEquals(nightMode, repo.getNightMode().first())
         }
+    }
+
+    @Test
+    fun referencePitchDefaultIs440() = testScope.runTest {
+        val repo = createRepository()
+        assertEquals(DEFAULT_REFERENCE_PITCH, repo.getReferencePitch().first())
+    }
+
+    @Test
+    fun referencePitchRoundTrip() = testScope.runTest {
+        val repo = createRepository()
+        repo.setReferencePitch(442)
+        assertEquals(442, repo.getReferencePitch().first())
     }
 }

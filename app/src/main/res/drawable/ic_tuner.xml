@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ This file is part of Tuner.
+  ~ Copyright (C) 2026 Philipp Bobek <philipp.bobek@mailbox.org>
+  ~
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Tuner is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24dp"
+        android:height="24dp"
+        android:tint="?attr/colorControlNormal"
+        android:viewportWidth="960"
+        android:viewportHeight="960">
+    <path
+            android:fillColor="@android:color/white"
+            android:pathData="M430,864.77C430,724.86 313.33,654.9 313.33,480L313.33,130.21Q313.33,112.72 330,112.72L380,112.72Q396.67,112.72 396.67,130.21L396.67,480C396.67,619.92 563.33,619.92 563.33,480L563.33,130.21Q563.33,112.72 580,112.72L630,112.72Q646.67,112.72 646.67,130.21L646.67,480C646.67,654.9 530,724.86 530,864.77Z" />
+    <path
+            android:fillColor="@android:color/transparent"
+            android:pathData="M246.67,165.19Q196.67,305.1 246.67,445.02M146.67,95.23Q80,305.1 146.67,514.98M713.33,165.19Q763.33,305.1 713.33,445.02M813.33,95.23Q880,305.1 813.33,514.98"
+            android:strokeWidth="51.22"
+            android:strokeColor="@android:color/white"
+            android:strokeLineCap="butt" />
+</vector>

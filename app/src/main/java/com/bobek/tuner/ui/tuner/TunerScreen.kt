@@ -43,6 +43,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -55,6 +56,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -86,7 +90,10 @@ fun TunerScreen(
 ) {
     val context = LocalContext.current
     val state by viewModel.getTunerStateFlow().collectAsState()
+    val referencePitch by viewModel.getReferencePitchFlow().collectAsState()
     val settingsLabel = stringResource(R.string.settings)
+
+    var showReferencePitchDialog by rememberSaveable { mutableStateOf(false) }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -125,56 +132,91 @@ fun TunerScreen(
 
             val cents: Int? = (state as? TunerState.Listening)?.note?.cents
 
-            BoxWithConstraints(
+            Column(
                 modifier = Modifier
                     .padding(padding)
                     .fillMaxSize()
             ) {
-                val isLandscape = maxWidth > maxHeight
+                ReferencePitchButton(
+                    referencePitch = referencePitch,
+                    onClick = { showReferencePitchDialog = true },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 8.dp)
+                )
 
-                if (isLandscape) {
-                    Row(modifier = Modifier.fillMaxSize()) {
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            NoteContent(
-                                state = state,
-                                onGrantPermission = { permissionLauncher.launch(RECORD_AUDIO) },
-                                compact = true
-                            )
+                BoxWithConstraints(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    val isLandscape = maxWidth > maxHeight
+
+                    if (isLandscape) {
+                        Row(modifier = Modifier.fillMaxSize()) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                NoteContent(
+                                    state = state,
+                                    onGrantPermission = { permissionLauncher.launch(RECORD_AUDIO) },
+                                    compact = true
+                                )
+                            }
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight(),
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                MeterContent(cents)
+                            }
                         }
-                        Column(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight(),
-                            verticalArrangement = Arrangement.Center
-                        ) {
+                    } else {
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxWidth(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                NoteContent(
+                                    state = state,
+                                    onGrantPermission = { permissionLauncher.launch(RECORD_AUDIO) },
+                                    compact = false
+                                )
+                            }
                             MeterContent(cents)
                         }
-                    }
-                } else {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            NoteContent(
-                                state = state,
-                                onGrantPermission = { permissionLauncher.launch(RECORD_AUDIO) },
-                                compact = false
-                            )
-                        }
-                        MeterContent(cents)
                     }
                 }
             }
         }
     )
+
+    if (showReferencePitchDialog) {
+        ReferencePitchDialog(
+            viewModel = viewModel,
+            onDismiss = { showReferencePitchDialog = false }
+        )
+    }
+}
+
+@Composable
+private fun ReferencePitchButton(
+    referencePitch: Int,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    OutlinedButton(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Text(stringResource(R.string.reference_pitch_display, referencePitch))
+    }
 }
 
 @Composable

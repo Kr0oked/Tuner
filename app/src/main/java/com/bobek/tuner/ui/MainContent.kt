@@ -83,6 +83,7 @@ fun MainContent(
             composable("settings") {
                 SettingsScreen(
                     viewModel = appViewModel,
+                    tunerViewModel = tunerViewModel,
                     onBackClick = { navController.popBackStack() },
                     onLicenseClick = { navController.navigate("license") },
                     onThirdPartyLicensesClick = { navController.navigate("licenses") }

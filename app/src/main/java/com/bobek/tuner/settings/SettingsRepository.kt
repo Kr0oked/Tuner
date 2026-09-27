@@ -24,4 +24,6 @@ import kotlinx.coroutines.flow.Flow
 interface SettingsRepository {
     fun getNightMode(): Flow<AppNightMode>
     suspend fun setNightMode(nightMode: AppNightMode)
+    fun getReferencePitch(): Flow<Int>
+    suspend fun setReferencePitch(referencePitch: Int)
 }

@@ -76,6 +76,22 @@ class DetectedNoteTest {
     }
 
     @Test
+    fun fromFrequencyAtNonDefaultReferencePitchRecognizesItAsInTune() {
+        val note = DetectedNote.fromFrequency(442f, referencePitch = 442.0)
+        assertEquals("A", note.name)
+        assertEquals(4, note.octave)
+        assertEquals(0, note.cents)
+    }
+
+    @Test
+    fun fromFrequencyAt440WithNonDefaultReferencePitchYieldsNegativeCents() {
+        val note = DetectedNote.fromFrequency(440f, referencePitch = 442.0)
+        assertEquals("A", note.name)
+        assertEquals(4, note.octave)
+        assertTrue(note.cents < 0)
+    }
+
+    @Test
     fun isSameNoteIsTrueForSameNameAndOctaveRegardlessOfFrequencyAndCents() {
         val a = DetectedNote(name = "A", octave = 4, frequency = 440f, cents = 0)
         val aSlightlySharp = DetectedNote(name = "A", octave = 4, frequency = 442f, cents = 8)

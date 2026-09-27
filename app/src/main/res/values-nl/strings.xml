@@ -25,6 +25,10 @@
     <string name="tuner_listening">Luisteren…</string>
     <string name="navigate_back">Terug</string>
     <string name="settings">Instellingen</string>
+    <string name="reference_pitch">Kamertoon</string>
+    <string name="reference_pitch_display">Kamertoon: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">Standaardwaarde herstellen</string>
     <string name="display">Scherm</string>
     <string name="night_mode">Thema</string>
     <string name="night_mode_follow_system">Systeem volgen</string>

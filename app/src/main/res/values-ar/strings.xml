@@ -25,6 +25,10 @@
     <string name="tuner_listening">الاستماع…</string>
     <string name="navigate_back">الرجوع للخلف</string>
     <string name="settings">الإعدادات</string>
+    <string name="reference_pitch">درجة الصوت المرجعية</string>
+    <string name="reference_pitch_display">المرجع: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">إعادة التعيين إلى الافتراضي</string>
     <string name="display">العرض</string>
     <string name="night_mode">المظهر</string>
     <string name="night_mode_follow_system">اتباع النظام</string>

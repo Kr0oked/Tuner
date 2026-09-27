@@ -18,26 +18,119 @@
 
 package com.bobek.tuner.ui.tuner
 
+import com.bobek.tuner.data.AppNightMode
+import com.bobek.tuner.domain.DEFAULT_REFERENCE_PITCH
 import com.bobek.tuner.domain.DetectedNote
+import com.bobek.tuner.settings.SettingsRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Test
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
+private val DEBOUNCE = 1.seconds
+
+@OptIn(ExperimentalCoroutinesApi::class)
 class TunerViewModelTest {
+
+    private val testScheduler = TestCoroutineScheduler()
+    private val testDispatcher = UnconfinedTestDispatcher(testScheduler)
+
+    @Before
+    fun setUp() {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
+    private fun createViewModel(
+        settingsRepository: SettingsRepository = FakeSettingsRepository()
+    ): TunerViewModel = TunerViewModel(settingsRepository)
 
     @Test
     fun initialStateIsIdle() {
-        val viewModel = TunerViewModel()
+        val viewModel = createViewModel()
         assertEquals(TunerState.Idle, viewModel.getTunerStateFlow().value)
     }
 
     @Test
     fun stopListeningWithoutStartingDoesNotThrowAndStaysIdle() {
-        val viewModel = TunerViewModel()
+        val viewModel = createViewModel()
         viewModel.stopListening()
         assertEquals(TunerState.Idle, viewModel.getTunerStateFlow().value)
+    }
+
+    @Test
+    fun initialReferencePitchLoadsFromSettings() = runTest(testDispatcher) {
+        val settings = FakeSettingsRepository(referencePitch = 442)
+        val viewModel = createViewModel(settings)
+        assertEquals(442, viewModel.getReferencePitchFlow().value)
+    }
+
+    @Test
+    fun setReferencePitchUpdatesFlow() {
+        val viewModel = createViewModel()
+        viewModel.setReferencePitch(442)
+        assertEquals(442, viewModel.getReferencePitchFlow().value)
+    }
+
+    @Test
+    fun referencePitchPersistedToSettingsAfterDebounce() = runTest(testDispatcher) {
+        val settings = FakeSettingsRepository()
+        val viewModel = createViewModel(settings)
+
+        viewModel.setReferencePitch(442)
+        advanceTimeBy(DEBOUNCE + 1.milliseconds)
+
+        assertEquals(442, settings.writtenReferencePitch)
+    }
+
+    @Test
+    fun initialReferencePitchNotPersistedToSettings() = runTest(testDispatcher) {
+        val settings = FakeSettingsRepository()
+        createViewModel(settings)
+
+        advanceTimeBy(DEBOUNCE + 1.milliseconds)
+
+        assertFalse(settings.referencePitchWritten)
+    }
+}
+
+private class FakeSettingsRepository(
+    referencePitch: Int = DEFAULT_REFERENCE_PITCH
+) : SettingsRepository {
+
+    private val referencePitchFlow = MutableStateFlow(referencePitch)
+
+    var referencePitchWritten = false
+        private set
+    var writtenReferencePitch: Int? = null
+        private set
+
+    override fun getNightMode() = MutableStateFlow(AppNightMode.FOLLOW_SYSTEM)
+    override suspend fun setNightMode(nightMode: AppNightMode) = Unit
+
+    override fun getReferencePitch(): Flow<Int> = referencePitchFlow
+    override suspend fun setReferencePitch(referencePitch: Int) {
+        referencePitchWritten = true
+        writtenReferencePitch = referencePitch
     }
 }
 

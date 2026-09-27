@@ -25,18 +25,25 @@ import android.media.MediaRecorder.AudioSource
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bobek.tuner.domain.DEFAULT_REFERENCE_PITCH
 import com.bobek.tuner.domain.DetectedNote
 import com.bobek.tuner.domain.PitchDetector
+import com.bobek.tuner.settings.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.math.sqrt
+import kotlin.time.Duration.Companion.seconds
 
 sealed class TunerState {
     object Idle : TunerState()
@@ -46,6 +53,8 @@ sealed class TunerState {
 interface ITunerViewModel {
 
     fun getTunerStateFlow(): StateFlow<TunerState>
+    fun getReferencePitchFlow(): StateFlow<Int>
+    fun setReferencePitch(referencePitch: Int)
 
     @RequiresPermission(RECORD_AUDIO)
     fun startListening()
@@ -61,14 +70,37 @@ internal const val NOTE_CONFIRMATION_FRAMES = 3
 internal const val ONSET_ENERGY_RATIO = 2.5f
 internal const val ONSET_MIN_RMS = 0.01f
 
+private val SETTINGS_DEBOUNCE = 1.seconds
+
 @HiltViewModel
-class TunerViewModel @Inject constructor() : ViewModel(), ITunerViewModel {
+@OptIn(FlowPreview::class)
+class TunerViewModel @Inject constructor(
+    private val settingsRepository: SettingsRepository
+) : ViewModel(), ITunerViewModel {
 
     private val tunerStateFlow = MutableStateFlow<TunerState>(TunerState.Idle)
+    private val referencePitchFlow = MutableStateFlow(DEFAULT_REFERENCE_PITCH)
 
     private var recordingJob: Job? = null
 
+    init {
+        viewModelScope.launch { initFromSettings() }
+        viewModelScope.launch {
+            referencePitchFlow.drop(1).debounce(SETTINGS_DEBOUNCE)
+                .collect { settingsRepository.setReferencePitch(it) }
+        }
+    }
+
+    private suspend fun initFromSettings() {
+        settingsRepository.getReferencePitch().firstOrNull()?.let { referencePitchFlow.value = it }
+    }
+
     override fun getTunerStateFlow() = tunerStateFlow
+    override fun getReferencePitchFlow(): StateFlow<Int> = referencePitchFlow
+
+    override fun setReferencePitch(referencePitch: Int) {
+        referencePitchFlow.value = referencePitch
+    }
 
     @RequiresPermission(RECORD_AUDIO)
     override fun startListening() {
@@ -96,7 +128,8 @@ class TunerViewModel @Inject constructor() : ViewModel(), ITunerViewModel {
                 val read = record.read(buffer, 0, ANALYSIS_SIZE, AudioRecord.READ_BLOCKING)
                 if (read > 0 && !onsetDetector.isOnset(buffer)) {
                     val frequency = PitchDetector.detect(buffer, SAMPLE_RATE)
-                    val note = smoothing.process(frequency)?.let { DetectedNote.fromFrequency(it) }
+                    val note = smoothing.process(frequency)
+                        ?.let { DetectedNote.fromFrequency(it, referencePitchFlow.value.toDouble()) }
                     tunerStateFlow.value = TunerState.Listening(gate.process(note))
                 }
             }
@@ -139,9 +172,16 @@ class TunerViewModel @Inject constructor() : ViewModel(), ITunerViewModel {
 }
 
 class ComposeTunerViewModel(
-    val tunerState: TunerState = TunerState.Listening(null)
+    val tunerState: TunerState = TunerState.Listening(null),
+    referencePitch: Int = DEFAULT_REFERENCE_PITCH
 ) : ITunerViewModel {
+    private val referencePitchFlow = MutableStateFlow(referencePitch)
     override fun getTunerStateFlow() = MutableStateFlow(tunerState)
+    override fun getReferencePitchFlow(): StateFlow<Int> = referencePitchFlow
+    override fun setReferencePitch(referencePitch: Int) {
+        referencePitchFlow.value = referencePitch
+    }
+
     override fun startListening() = Unit
     override fun stopListening() = Unit
 }

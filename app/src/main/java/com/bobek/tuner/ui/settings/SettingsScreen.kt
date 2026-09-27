@@ -58,6 +58,9 @@ import com.bobek.tuner.R
 import com.bobek.tuner.data.AppNightMode
 import com.bobek.tuner.ui.ComposeAppViewModel
 import com.bobek.tuner.ui.IAppViewModel
+import com.bobek.tuner.ui.tuner.ComposeTunerViewModel
+import com.bobek.tuner.ui.tuner.ITunerViewModel
+import com.bobek.tuner.ui.tuner.ReferencePitchDialog
 
 private const val TAG = "SettingsScreen"
 
@@ -66,14 +69,17 @@ private const val TAG = "SettingsScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 fun SettingsScreen(
     viewModel: IAppViewModel = ComposeAppViewModel(),
+    tunerViewModel: ITunerViewModel = ComposeTunerViewModel(),
     onBackClick: () -> Unit = {},
     onLicenseClick: () -> Unit = {},
     onThirdPartyLicensesClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val nightMode by viewModel.getNightModeFlow().collectAsState()
+    val referencePitch by tunerViewModel.getReferencePitchFlow().collectAsState()
 
     var showNightModeDialog by rememberSaveable { mutableStateOf(false) }
+    var showReferencePitchDialog by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -96,6 +102,20 @@ fun SettingsScreen(
                 .padding(padding)
                 .verticalScroll(rememberScrollState())
         ) {
+            SettingsSection(
+                title = stringResource(R.string.tuner),
+                icon = {
+                    Icon(painter = painterResource(R.drawable.ic_tuner), contentDescription = null)
+                }
+            ) {
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.reference_pitch)) },
+                    supportingContent = { Text(stringResource(R.string.reference_pitch_value, referencePitch)) },
+                    modifier = Modifier.clickable { showReferencePitchDialog = true }
+                )
+            }
+
+            HorizontalDivider()
             SettingsSection(
                 title = stringResource(R.string.display),
                 icon = {
@@ -159,6 +179,15 @@ fun SettingsScreen(
             viewModel = viewModel,
             onDismiss = {
                 showNightModeDialog = false
+            }
+        )
+    }
+
+    if (showReferencePitchDialog) {
+        ReferencePitchDialog(
+            viewModel = tunerViewModel,
+            onDismiss = {
+                showReferencePitchDialog = false
             }
         )
     }

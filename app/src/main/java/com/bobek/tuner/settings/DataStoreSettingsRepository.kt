@@ -22,8 +22,10 @@ import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.bobek.tuner.data.AppNightMode
+import com.bobek.tuner.domain.DEFAULT_REFERENCE_PITCH
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.map
 
@@ -35,6 +37,7 @@ class DataStoreSettingsRepository @Inject constructor(
 
     companion object {
         val NIGHT_MODE_KEY = stringPreferencesKey(PreferenceConstants.NIGHT_MODE)
+        val REFERENCE_PITCH_KEY = intPreferencesKey(PreferenceConstants.REFERENCE_PITCH)
     }
 
     override fun getNightMode() = preferencesDataStore.data
@@ -44,5 +47,13 @@ class DataStoreSettingsRepository @Inject constructor(
     override suspend fun setNightMode(nightMode: AppNightMode) {
         preferencesDataStore.edit { it[NIGHT_MODE_KEY] = nightMode.preferenceValue }
         Log.d(TAG, "Persisted nightMode: ${nightMode.preferenceValue}")
+    }
+
+    override fun getReferencePitch() = preferencesDataStore.data
+        .map { it[REFERENCE_PITCH_KEY] ?: DEFAULT_REFERENCE_PITCH }
+
+    override suspend fun setReferencePitch(referencePitch: Int) {
+        preferencesDataStore.edit { it[REFERENCE_PITCH_KEY] = referencePitch }
+        Log.d(TAG, "Persisted referencePitch: $referencePitch")
     }
 }

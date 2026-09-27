@@ -25,6 +25,10 @@
     <string name="tuner_listening">Ouvindo…</string>
     <string name="navigate_back">Voltar</string>
     <string name="settings">Configurações</string>
+    <string name="reference_pitch">Tom de referência</string>
+    <string name="reference_pitch_display">Referência: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">Restaurar padrão</string>
     <string name="display">Tela</string>
     <string name="night_mode">Tema</string>
     <string name="night_mode_follow_system">Seguir sistema</string>

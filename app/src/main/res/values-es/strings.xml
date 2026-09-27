@@ -25,6 +25,10 @@
     <string name="tuner_listening">Escuchando…</string>
     <string name="navigate_back">Atrás</string>
     <string name="settings">Ajustes</string>
+    <string name="reference_pitch">Tono de referencia</string>
+    <string name="reference_pitch_display">Referencia: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">Restablecer valor predeterminado</string>
     <string name="display">Pantalla</string>
     <string name="night_mode">Tema</string>
     <string name="night_mode_follow_system">Seguir sistema</string>

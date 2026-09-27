@@ -24,4 +24,5 @@ object PreferenceConstants {
     const val NIGHT_MODE_VALUE_FOLLOW_SYSTEM = "follow_system"
     const val NIGHT_MODE_VALUE_NO = "no"
     const val NIGHT_MODE_VALUE_YES = "yes"
+    const val REFERENCE_PITCH = "reference_pitch"
 }

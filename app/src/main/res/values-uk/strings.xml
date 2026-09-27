@@ -25,6 +25,10 @@
     <string name="tuner_listening">Прослуховування…</string>
     <string name="navigate_back">Назад</string>
     <string name="settings">Налаштування</string>
+    <string name="reference_pitch">Камертон</string>
+    <string name="reference_pitch_display">Камертон: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">Скинути до типового</string>
     <string name="display">Екран</string>
     <string name="night_mode">Тема</string>
     <string name="night_mode_follow_system">Як у системі</string>

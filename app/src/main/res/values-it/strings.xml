@@ -25,6 +25,10 @@
     <string name="tuner_listening">In ascolto…</string>
     <string name="navigate_back">Indietro</string>
     <string name="settings">Impostazioni</string>
+    <string name="reference_pitch">Diapason</string>
+    <string name="reference_pitch_display">Diapason: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">Ripristina predefinito</string>
     <string name="display">Schermo</string>
     <string name="night_mode">Tema</string>
     <string name="night_mode_follow_system">Segui sistema</string>

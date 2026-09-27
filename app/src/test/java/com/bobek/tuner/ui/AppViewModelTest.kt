@@ -19,6 +19,7 @@
 package com.bobek.tuner.ui
 
 import com.bobek.tuner.data.AppNightMode
+import com.bobek.tuner.domain.DEFAULT_REFERENCE_PITCH
 import com.bobek.tuner.settings.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -101,6 +102,7 @@ private class FakeSettingsRepository(
 ) : SettingsRepository {
 
     private val nightModeFlow = MutableStateFlow(nightMode)
+    private val referencePitchFlow = MutableStateFlow(DEFAULT_REFERENCE_PITCH)
 
     var nightModeWritten = false
         private set
@@ -111,5 +113,10 @@ private class FakeSettingsRepository(
     override suspend fun setNightMode(nightMode: AppNightMode) {
         nightModeWritten = true
         writtenNightMode = nightMode
+    }
+
+    override fun getReferencePitch(): Flow<Int> = referencePitchFlow
+    override suspend fun setReferencePitch(referencePitch: Int) {
+        referencePitchFlow.value = referencePitch
     }
 }

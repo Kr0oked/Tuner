@@ -25,6 +25,10 @@
     <string name="tuner_listening">正在监听…</string>
     <string name="navigate_back">返回</string>
     <string name="settings">设置</string>
+    <string name="reference_pitch">参考音高</string>
+    <string name="reference_pitch_display">参考: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">重置为默认值</string>
     <string name="display">显示</string>
     <string name="night_mode">主题</string>
     <string name="night_mode_follow_system">跟随系统</string>

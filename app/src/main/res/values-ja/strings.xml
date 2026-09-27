@@ -25,6 +25,10 @@
     <string name="tuner_listening">聴き取り中…</string>
     <string name="navigate_back">戻る</string>
     <string name="settings">設定</string>
+    <string name="reference_pitch">基準ピッチ</string>
+    <string name="reference_pitch_display">基準: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">デフォルトに戻す</string>
     <string name="display">画面表示</string>
     <string name="night_mode">テーマ</string>
     <string name="night_mode_follow_system">システムに従う</string>

@@ -25,6 +25,10 @@
     <string name="tuner_listening">듣는 중…</string>
     <string name="navigate_back">뒤로</string>
     <string name="settings">설정</string>
+    <string name="reference_pitch">기준 음정</string>
+    <string name="reference_pitch_display">기준: %1$d Hz</string>
+    <string name="reference_pitch_value">%1$d Hz</string>
+    <string name="reset_to_default">기본값으로 재설정</string>
     <string name="display">화면</string>
     <string name="night_mode">테마</string>
     <string name="night_mode_follow_system">시스템 설정 따르기</string>

@@ -24,7 +24,10 @@ import kotlin.math.roundToInt
 
 private val NOTE_NAMES = arrayOf("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
 private const val A4_MIDI = 69
-private const val A4_FREQ = 440.0
+
+const val DEFAULT_REFERENCE_PITCH = 440
+const val MIN_REFERENCE_PITCH = 410
+const val MAX_REFERENCE_PITCH = 480
 
 data class DetectedNote(
     val name: String,
@@ -36,12 +39,12 @@ data class DetectedNote(
         other != null && name == other.name && octave == other.octave
 
     companion object {
-        fun fromFrequency(frequency: Float): DetectedNote {
-            val midiExact = 12.0 * log2(frequency / A4_FREQ) + A4_MIDI
+        fun fromFrequency(frequency: Float, referencePitch: Double = DEFAULT_REFERENCE_PITCH.toDouble()): DetectedNote {
+            val midiExact = 12.0 * log2(frequency / referencePitch) + A4_MIDI
             val midiRounded = midiExact.roundToInt()
             val noteIndex = ((midiRounded % 12) + 12) % 12
             val octave = (midiRounded / 12) - 1
-            val noteFreq = A4_FREQ * 2.0.pow((midiRounded - A4_MIDI) / 12.0)
+            val noteFreq = referencePitch * 2.0.pow((midiRounded - A4_MIDI) / 12.0)
             val cents = (1200.0 * log2(frequency / noteFreq)).roundToInt().coerceIn(-50, 50)
             return DetectedNote(
                 name = NOTE_NAMES[noteIndex],
