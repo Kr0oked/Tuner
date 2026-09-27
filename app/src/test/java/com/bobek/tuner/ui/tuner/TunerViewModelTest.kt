@@ -111,17 +111,58 @@ class TunerViewModelTest {
 
         assertFalse(settings.referencePitchWritten)
     }
+
+    @Test
+    fun initialSolfegeNotationLoadsFromSettings() = runTest(testDispatcher) {
+        val settings = FakeSettingsRepository(solfegeNotation = true)
+        val viewModel = createViewModel(settings)
+        assertTrue(viewModel.getSolfegeNotationFlow().value)
+    }
+
+    @Test
+    fun setSolfegeNotationUpdatesFlow() {
+        val viewModel = createViewModel()
+        viewModel.setSolfegeNotation(true)
+        assertTrue(viewModel.getSolfegeNotationFlow().value)
+    }
+
+    @Test
+    fun solfegeNotationPersistedToSettingsAfterDebounce() = runTest(testDispatcher) {
+        val settings = FakeSettingsRepository()
+        val viewModel = createViewModel(settings)
+
+        viewModel.setSolfegeNotation(true)
+        advanceTimeBy(DEBOUNCE + 1.milliseconds)
+
+        assertEquals(true, settings.writtenSolfegeNotation)
+    }
+
+    @Test
+    fun initialSolfegeNotationNotPersistedToSettings() = runTest(testDispatcher) {
+        val settings = FakeSettingsRepository()
+        createViewModel(settings)
+
+        advanceTimeBy(DEBOUNCE + 1.milliseconds)
+
+        assertFalse(settings.solfegeNotationWritten)
+    }
 }
 
 private class FakeSettingsRepository(
-    referencePitch: Int = DEFAULT_REFERENCE_PITCH
+    referencePitch: Int = DEFAULT_REFERENCE_PITCH,
+    solfegeNotation: Boolean = false
 ) : SettingsRepository {
 
     private val referencePitchFlow = MutableStateFlow(referencePitch)
+    private val solfegeNotationFlow = MutableStateFlow(solfegeNotation)
 
     var referencePitchWritten = false
         private set
     var writtenReferencePitch: Int? = null
+        private set
+    var solfegeNotationWritten = false
+        private set
+    var writtenSolfegeNotation: Boolean? = null
         private set
 
     override fun getNightMode() = MutableStateFlow(AppNightMode.FOLLOW_SYSTEM)
@@ -131,6 +172,12 @@ private class FakeSettingsRepository(
     override suspend fun setReferencePitch(referencePitch: Int) {
         referencePitchWritten = true
         writtenReferencePitch = referencePitch
+    }
+
+    override fun getSolfegeNotation(): Flow<Boolean> = solfegeNotationFlow
+    override suspend fun setSolfegeNotation(solfegeNotation: Boolean) {
+        solfegeNotationWritten = true
+        writtenSolfegeNotation = solfegeNotation
     }
 }
 

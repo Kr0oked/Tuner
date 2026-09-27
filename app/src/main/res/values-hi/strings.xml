@@ -29,6 +29,8 @@
     <string name="reference_pitch_display">संदर्भ: %1$d Hz</string>
     <string name="reference_pitch_value">%1$d Hz</string>
     <string name="reset_to_default">डिफ़ॉल्ट पर रीसेट करें</string>
+    <string name="solfege_notation">सोल्फेज संकेतन</string>
+    <string name="solfege_notation_summary">C, D, E… के बजाय Do, Ré, Mi…</string>
     <string name="display">डिस्प्ले</string>
     <string name="night_mode">थीम</string>
     <string name="night_mode_follow_system">सिस्टम का अनुसरण करें</string>

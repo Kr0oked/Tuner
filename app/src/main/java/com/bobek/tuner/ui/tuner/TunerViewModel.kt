@@ -55,6 +55,8 @@ interface ITunerViewModel {
     fun getTunerStateFlow(): StateFlow<TunerState>
     fun getReferencePitchFlow(): StateFlow<Int>
     fun setReferencePitch(referencePitch: Int)
+    fun getSolfegeNotationFlow(): StateFlow<Boolean>
+    fun setSolfegeNotation(solfegeNotation: Boolean)
 
     @RequiresPermission(RECORD_AUDIO)
     fun startListening()
@@ -80,6 +82,7 @@ class TunerViewModel @Inject constructor(
 
     private val tunerStateFlow = MutableStateFlow<TunerState>(TunerState.Idle)
     private val referencePitchFlow = MutableStateFlow(DEFAULT_REFERENCE_PITCH)
+    private val solfegeNotationFlow = MutableStateFlow(false)
 
     private var recordingJob: Job? = null
 
@@ -89,10 +92,15 @@ class TunerViewModel @Inject constructor(
             referencePitchFlow.drop(1).debounce(SETTINGS_DEBOUNCE)
                 .collect { settingsRepository.setReferencePitch(it) }
         }
+        viewModelScope.launch {
+            solfegeNotationFlow.drop(1).debounce(SETTINGS_DEBOUNCE)
+                .collect { settingsRepository.setSolfegeNotation(it) }
+        }
     }
 
     private suspend fun initFromSettings() {
         settingsRepository.getReferencePitch().firstOrNull()?.let { referencePitchFlow.value = it }
+        settingsRepository.getSolfegeNotation().firstOrNull()?.let { solfegeNotationFlow.value = it }
     }
 
     override fun getTunerStateFlow() = tunerStateFlow
@@ -100,6 +108,12 @@ class TunerViewModel @Inject constructor(
 
     override fun setReferencePitch(referencePitch: Int) {
         referencePitchFlow.value = referencePitch
+    }
+
+    override fun getSolfegeNotationFlow(): StateFlow<Boolean> = solfegeNotationFlow
+
+    override fun setSolfegeNotation(solfegeNotation: Boolean) {
+        solfegeNotationFlow.value = solfegeNotation
     }
 
     @RequiresPermission(RECORD_AUDIO)
@@ -173,13 +187,20 @@ class TunerViewModel @Inject constructor(
 
 class ComposeTunerViewModel(
     val tunerState: TunerState = TunerState.Listening(null),
-    referencePitch: Int = DEFAULT_REFERENCE_PITCH
+    referencePitch: Int = DEFAULT_REFERENCE_PITCH,
+    solfegeNotation: Boolean = false
 ) : ITunerViewModel {
     private val referencePitchFlow = MutableStateFlow(referencePitch)
+    private val solfegeNotationFlow = MutableStateFlow(solfegeNotation)
     override fun getTunerStateFlow() = MutableStateFlow(tunerState)
     override fun getReferencePitchFlow(): StateFlow<Int> = referencePitchFlow
     override fun setReferencePitch(referencePitch: Int) {
         referencePitchFlow.value = referencePitch
+    }
+
+    override fun getSolfegeNotationFlow(): StateFlow<Boolean> = solfegeNotationFlow
+    override fun setSolfegeNotation(solfegeNotation: Boolean) {
+        solfegeNotationFlow.value = solfegeNotation
     }
 
     override fun startListening() = Unit

@@ -29,6 +29,8 @@
     <string name="reference_pitch_display">Камертон: %1$d Hz</string>
     <string name="reference_pitch_value">%1$d Hz</string>
     <string name="reset_to_default">Сбросить по умолчанию</string>
+    <string name="solfege_notation">Сольфеджио</string>
+    <string name="solfege_notation_summary">Do, Ré, Mi… вместо C, D, E…</string>
     <string name="display">Экран</string>
     <string name="night_mode">Тема</string>
     <string name="night_mode_follow_system">Как в системе</string>

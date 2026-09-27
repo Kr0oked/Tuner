@@ -36,6 +36,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -77,6 +78,7 @@ fun SettingsScreen(
     val context = LocalContext.current
     val nightMode by viewModel.getNightModeFlow().collectAsState()
     val referencePitch by tunerViewModel.getReferencePitchFlow().collectAsState()
+    val solfegeNotation by tunerViewModel.getSolfegeNotationFlow().collectAsState()
 
     var showNightModeDialog by rememberSaveable { mutableStateOf(false) }
     var showReferencePitchDialog by rememberSaveable { mutableStateOf(false) }
@@ -112,6 +114,18 @@ fun SettingsScreen(
                     headlineContent = { Text(stringResource(R.string.reference_pitch)) },
                     supportingContent = { Text(stringResource(R.string.reference_pitch_value, referencePitch)) },
                     modifier = Modifier.clickable { showReferencePitchDialog = true }
+                )
+
+                ListItem(
+                    headlineContent = { Text(stringResource(R.string.solfege_notation)) },
+                    supportingContent = { Text(stringResource(R.string.solfege_notation_summary)) },
+                    trailingContent = {
+                        Switch(
+                            checked = solfegeNotation,
+                            onCheckedChange = { tunerViewModel.setSolfegeNotation(it) }
+                        )
+                    },
+                    modifier = Modifier.clickable { tunerViewModel.setSolfegeNotation(!solfegeNotation) }
                 )
             }
 

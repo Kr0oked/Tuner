@@ -29,6 +29,8 @@
     <string name="reference_pitch_display">Kamertoon: %1$d Hz</string>
     <string name="reference_pitch_value">%1$d Hz</string>
     <string name="reset_to_default">Standaardwaarde herstellen</string>
+    <string name="solfege_notation">Solfège-notatie</string>
+    <string name="solfege_notation_summary">Do, Ré, Mi… in plaats van C, D, E…</string>
     <string name="display">Scherm</string>
     <string name="night_mode">Thema</string>
     <string name="night_mode_follow_system">Systeem volgen</string>

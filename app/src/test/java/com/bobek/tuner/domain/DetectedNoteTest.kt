@@ -117,4 +117,27 @@ class DetectedNoteTest {
         val a4 = DetectedNote(name = "A", octave = 4, frequency = 440f, cents = 0)
         assertFalse(a4.isSameNote(null))
     }
+
+    @Test
+    fun displayNameReturnsLetterNameWhenSolfegeNotationDisabled() {
+        val note = DetectedNote(name = "C#", octave = 4, frequency = 277.18f, cents = 0)
+        assertEquals("C#", note.displayName(solfegeNotation = false))
+    }
+
+    @Test
+    fun displayNameReturnsSolfegeSyllableWhenSolfegeNotationEnabled() {
+        val expected = mapOf(
+            "C" to "Do", "C#" to "Do♯",
+            "D" to "Ré", "D#" to "Ré♯",
+            "E" to "Mi",
+            "F" to "Fa", "F#" to "Fa♯",
+            "G" to "Sol", "G#" to "Sol♯",
+            "A" to "La", "A#" to "La♯",
+            "B" to "Si"
+        )
+        for ((letterName, solfegeName) in expected) {
+            val note = DetectedNote(name = letterName, octave = 4, frequency = 0f, cents = 0)
+            assertEquals(solfegeName, note.displayName(solfegeNotation = true))
+        }
+    }
 }

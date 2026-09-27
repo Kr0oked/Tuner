@@ -26,4 +26,6 @@ interface SettingsRepository {
     suspend fun setNightMode(nightMode: AppNightMode)
     fun getReferencePitch(): Flow<Int>
     suspend fun setReferencePitch(referencePitch: Int)
+    fun getSolfegeNotation(): Flow<Boolean>
+    suspend fun setSolfegeNotation(solfegeNotation: Boolean)
 }

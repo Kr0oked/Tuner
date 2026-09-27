@@ -79,6 +79,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.bobek.tuner.R
 import com.bobek.tuner.domain.DetectedNote
+import com.bobek.tuner.domain.displayName
 import kotlin.math.abs
 
 @Composable
@@ -91,6 +92,7 @@ fun TunerScreen(
     val context = LocalContext.current
     val state by viewModel.getTunerStateFlow().collectAsState()
     val referencePitch by viewModel.getReferencePitchFlow().collectAsState()
+    val solfegeNotation by viewModel.getSolfegeNotationFlow().collectAsState()
     val settingsLabel = stringResource(R.string.settings)
 
     var showReferencePitchDialog by rememberSaveable { mutableStateOf(false) }
@@ -163,6 +165,7 @@ fun TunerScreen(
                                 NoteContent(
                                     state = state,
                                     onGrantPermission = { permissionLauncher.launch(RECORD_AUDIO) },
+                                    solfegeNotation = solfegeNotation,
                                     compact = true
                                 )
                             }
@@ -186,6 +189,7 @@ fun TunerScreen(
                                 NoteContent(
                                     state = state,
                                     onGrantPermission = { permissionLauncher.launch(RECORD_AUDIO) },
+                                    solfegeNotation = solfegeNotation,
                                     compact = false
                                 )
                             }
@@ -223,11 +227,16 @@ private fun ReferencePitchButton(
 private fun NoteContent(
     state: TunerState,
     onGrantPermission: () -> Unit,
+    solfegeNotation: Boolean,
     compact: Boolean
 ) {
     when (state) {
         is TunerState.Idle -> IdleContent(onGrantPermission = onGrantPermission, compact = compact)
-        is TunerState.Listening -> ListeningContent(note = state.note, compact = compact)
+        is TunerState.Listening -> ListeningContent(
+            note = state.note,
+            solfegeNotation = solfegeNotation,
+            compact = compact
+        )
     }
 }
 
@@ -280,6 +289,7 @@ private fun IdleContent(
 @Composable
 private fun ListeningContent(
     note: DetectedNote?,
+    solfegeNotation: Boolean,
     modifier: Modifier = Modifier,
     compact: Boolean = false
 ) {
@@ -293,7 +303,7 @@ private fun ListeningContent(
 
         if (note != null) {
             Text(
-                text = "${note.name}${note.octave}",
+                text = "${note.displayName(solfegeNotation)}${note.octave}",
                 fontSize = if (compact) 56.sp else 96.sp,
                 fontWeight = FontWeight.Bold,
                 color = noteColor

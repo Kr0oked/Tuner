@@ -29,6 +29,8 @@
     <string name="reference_pitch_display">Diapason: %1$d Hz</string>
     <string name="reference_pitch_value">%1$d Hz</string>
     <string name="reset_to_default">Ripristina predefinito</string>
+    <string name="solfege_notation">Notazione solfeggio</string>
+    <string name="solfege_notation_summary">Do, Ré, Mi… invece di C, D, E…</string>
     <string name="display">Schermo</string>
     <string name="night_mode">Tema</string>
     <string name="night_mode_follow_system">Segui sistema</string>

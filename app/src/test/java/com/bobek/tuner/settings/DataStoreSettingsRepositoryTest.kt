@@ -82,4 +82,17 @@ class DataStoreSettingsRepositoryTest {
         repo.setReferencePitch(442)
         assertEquals(442, repo.getReferencePitch().first())
     }
+
+    @Test
+    fun solfegeNotationDefaultIsFalse() = testScope.runTest {
+        val repo = createRepository()
+        assertEquals(false, repo.getSolfegeNotation().first())
+    }
+
+    @Test
+    fun solfegeNotationRoundTrip() = testScope.runTest {
+        val repo = createRepository()
+        repo.setSolfegeNotation(true)
+        assertEquals(true, repo.getSolfegeNotation().first())
+    }
 }

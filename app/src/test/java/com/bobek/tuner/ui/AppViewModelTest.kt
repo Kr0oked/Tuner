@@ -103,6 +103,7 @@ private class FakeSettingsRepository(
 
     private val nightModeFlow = MutableStateFlow(nightMode)
     private val referencePitchFlow = MutableStateFlow(DEFAULT_REFERENCE_PITCH)
+    private val solfegeNotationFlow = MutableStateFlow(false)
 
     var nightModeWritten = false
         private set
@@ -118,5 +119,10 @@ private class FakeSettingsRepository(
     override fun getReferencePitch(): Flow<Int> = referencePitchFlow
     override suspend fun setReferencePitch(referencePitch: Int) {
         referencePitchFlow.value = referencePitch
+    }
+
+    override fun getSolfegeNotation(): Flow<Boolean> = solfegeNotationFlow
+    override suspend fun setSolfegeNotation(solfegeNotation: Boolean) {
+        solfegeNotationFlow.value = solfegeNotation
     }
 }

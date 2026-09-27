@@ -21,6 +21,7 @@ package com.bobek.tuner.settings
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -38,6 +39,7 @@ class DataStoreSettingsRepository @Inject constructor(
     companion object {
         val NIGHT_MODE_KEY = stringPreferencesKey(PreferenceConstants.NIGHT_MODE)
         val REFERENCE_PITCH_KEY = intPreferencesKey(PreferenceConstants.REFERENCE_PITCH)
+        val SOLFEGE_NOTATION_KEY = booleanPreferencesKey(PreferenceConstants.SOLFEGE_NOTATION)
     }
 
     override fun getNightMode() = preferencesDataStore.data
@@ -55,5 +57,13 @@ class DataStoreSettingsRepository @Inject constructor(
     override suspend fun setReferencePitch(referencePitch: Int) {
         preferencesDataStore.edit { it[REFERENCE_PITCH_KEY] = referencePitch }
         Log.d(TAG, "Persisted referencePitch: $referencePitch")
+    }
+
+    override fun getSolfegeNotation() = preferencesDataStore.data
+        .map { it[SOLFEGE_NOTATION_KEY] ?: false }
+
+    override suspend fun setSolfegeNotation(solfegeNotation: Boolean) {
+        preferencesDataStore.edit { it[SOLFEGE_NOTATION_KEY] = solfegeNotation }
+        Log.d(TAG, "Persisted solfegeNotation: $solfegeNotation")
     }
 }

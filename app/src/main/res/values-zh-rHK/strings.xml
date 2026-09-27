@@ -29,6 +29,8 @@
     <string name="reference_pitch_display">參考: %1$d Hz</string>
     <string name="reference_pitch_value">%1$d Hz</string>
     <string name="reset_to_default">重設為預設值</string>
+    <string name="solfege_notation">唱名記譜法</string>
+    <string name="solfege_notation_summary">用 Do、Ré、Mi…代替 C、D、E…</string>
     <string name="display">顯示</string>
     <string name="night_mode">主題</string>
     <string name="night_mode_follow_system">跟隨系統</string>

@@ -25,6 +25,16 @@ import kotlin.math.roundToInt
 private val NOTE_NAMES = arrayOf("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
 private const val A4_MIDI = 69
 
+private val SOLFEGE_NAMES = mapOf(
+    "C" to "Do", "C#" to "Do♯",
+    "D" to "Ré", "D#" to "Ré♯",
+    "E" to "Mi",
+    "F" to "Fa", "F#" to "Fa♯",
+    "G" to "Sol", "G#" to "Sol♯",
+    "A" to "La", "A#" to "La♯",
+    "B" to "Si"
+)
+
 const val DEFAULT_REFERENCE_PITCH = 440
 const val MIN_REFERENCE_PITCH = 410
 const val MAX_REFERENCE_PITCH = 480
@@ -55,3 +65,7 @@ data class DetectedNote(
         }
     }
 }
+
+fun DetectedNote.displayName(solfegeNotation: Boolean): String =
+    if (solfegeNotation) SOLFEGE_NAMES[name] ?: name
+    else name
