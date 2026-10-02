@@ -18,6 +18,7 @@
 
 package com.bobek.tuner
 
+import android.Manifest.permission.RECORD_AUDIO
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -33,6 +34,7 @@ import androidx.compose.ui.test.performScrollToNode
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import androidx.test.rule.GrantPermissionRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -43,7 +45,11 @@ import org.junit.runner.RunWith
 @OptIn(ExperimentalTestApi::class)
 class InstrumentedTest {
 
-    @get:Rule
+    // Granted before the activity launches, so every run starts in the same state regardless of earlier grants
+    @get:Rule(order = 0)
+    val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(RECORD_AUDIO)
+
+    @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Before
@@ -55,8 +61,8 @@ class InstrumentedTest {
     fun initialState() {
         onTopBarTitle().assertIsDisplayed()
         onSettingsButton().assertIsDisplayed()
-        onPermissionRationaleText().assertIsDisplayed()
-        onGrantPermissionButton().assertIsDisplayed()
+        onPermissionRationaleText().assertDoesNotExist()
+        onGrantPermissionButton().assertDoesNotExist()
     }
 
     @Test
