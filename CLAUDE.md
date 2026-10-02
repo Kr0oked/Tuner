@@ -58,12 +58,19 @@ The app follows MVVM in a single-Activity Compose setup with audio capture runni
 
 ### Key Packages
 
-| Package     | Responsibility                                                                                                                                       |
-|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `domain/`   | `PitchDetector` — YIN algorithm (de Cheveigné & Kawahara, 2002) at 44.1kHz PCM FLOAT; `DetectedNote` — note name, octave, frequency, cents deviation |
-| `data/`     | `AppNightMode`, `PreferenceChoice` — immutable preference models                                                                                     |
-| `settings/` | `DataStoreSettingsRepository` — persists preferences via Jetpack DataStore; injected via Hilt                                                        |
-| `ui/`       | Jetpack Compose screens: `tuner/`, `settings/`, `licenses/`, `theme/`                                                                                |
+What belongs where, rather than an inventory; a class is named only when it carries a rule worth knowing.
+
+- **`domain/`**: pure-Kotlin pitch detection, unit-testable without Android. `PitchDetector` — YIN algorithm
+  (de Cheveigné & Kawahara, 2002) at 44.1kHz PCM FLOAT; `DetectedNote` — note name, octave, frequency, cents
+  deviation.
+- **`data/`**: immutable preference models, e.g. `AppNightMode`, `PreferenceChoice`.
+- **`settings/`**: the `SettingsRepository` interface and its Jetpack DataStore implementation
+  (`DataStoreSettingsRepository`, bound in `SettingsModule`); keys live in `PreferenceConstants`. A new setting also
+  needs loading and debounced persisting in `AppViewModel` or `TunerViewModel`, a row in `SettingsScreen`, and the
+  two test fakes (`AppViewModelTest`, `TunerViewModelTest`).
+- **`licenses/`**: `LicenseRepository` reads the app and third-party license texts from `res/raw`.
+- **`ui/`**: Compose code, one subpackage per screen (`tuner/`, `settings/`, `licenses/`) plus `theme/`.
+  `MainContent` hosts navigation.
 
 ### Data Flow
 
