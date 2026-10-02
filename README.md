@@ -25,6 +25,8 @@ height="80">](https://github.com/Kr0oked/Tuner/releases/latest)
 
 * Chromatic tuner with automatic note detection
 * Precise pitch detection down to the cent
+* Adjustable reference pitch (410–480 Hz)
+* Optional solfège notation (Do, Ré, Mi…)
 * Light and dark theme
 * No advertisements
 * No trackers

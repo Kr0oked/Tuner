@@ -4,6 +4,8 @@ mit einer klaren Oberfläche und ganz ohne Ablenkung.
 Inhalt:
 * Chromatisches Stimmgerät mit automatischer Tonerkennung
 * Präzise Tonhöhenerkennung auf das Cent genau
+* Einstellbarer Kammerton (410–480 Hz)
+* Optionale Solfège-Notation (Do, Ré, Mi…)
 * Light und Dark Theme
 * Keine Werbung
 * Keine Tracker

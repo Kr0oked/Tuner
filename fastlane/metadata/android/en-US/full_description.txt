@@ -4,6 +4,8 @@ with a clean interface and no distractions.
 Features:
 * Chromatic tuner with automatic note detection
 * Precise pitch detection down to the cent
+* Adjustable reference pitch (410–480 Hz)
+* Optional solfège notation (Do, Ré, Mi…)
 * Light and Dark theme
 * No advertisements
 * No trackers

@@ -4,6 +4,8 @@ avec une interface épurée et sans distraction.
 Fonctionnalités :
 * Accordeur chromatique avec détection automatique des notes
 * Détection précise de la hauteur, au cent près
+* Diapason réglable (410–480 Hz)
+* Notation en solfège optionnelle (Do, Ré, Mi…)
 * Thème clair et sombre
 * Sans publicité
 * Sans traceurs

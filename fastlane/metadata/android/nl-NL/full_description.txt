@@ -4,6 +4,8 @@ met een overzichtelijke interface en zonder afleiding.
 Functies:
 * Chromatisch stemapparaat met automatische nootdetectie
 * Nauwkeurige toonhoogtedetectie tot op de cent
+* Instelbare kamertoon (410–480 Hz)
+* Optionele solfège-notatie (Do, Ré, Mi…)
 * Licht en donker thema
 * Geen advertenties
 * Geen trackers

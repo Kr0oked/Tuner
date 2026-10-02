@@ -4,6 +4,8 @@ con un'interfaccia pulita e senza distrazioni.
 Caratteristiche:
 * Accordatore cromatico con rilevamento automatico delle note
 * Rilevamento preciso dell'intonazione, fino al cent
+* Diapason regolabile (410–480 Hz)
+* Notazione solfeggio opzionale (Do, Ré, Mi…)
 * Tema chiaro e scuro
 * Nessuna pubblicità
 * Nessun tracciamento

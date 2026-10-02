@@ -4,6 +4,8 @@ con una interfaz limpia y sin distracciones.
 Características:
 * Afinador cromático con detección automática de notas
 * Detección precisa de tono, hasta el cent
+* Tono de referencia ajustable (410–480 Hz)
+* Notación de solfeo opcional (Do, Ré, Mi…)
 * Tema claro y oscuro
 * Sin publicidad
 * Sin rastreadores

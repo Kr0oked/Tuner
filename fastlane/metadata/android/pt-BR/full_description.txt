@@ -4,6 +4,8 @@ com uma interface limpa e sem distrações.
 Recursos:
 * Afinador cromático com detecção automática de notas
 * Detecção precisa de tom, até o cent
+* Tom de referência ajustável (410–480 Hz)
+* Notação de solfejo opcional (Do, Ré, Mi…)
 * Tema claro e escuro
 * Sem anúncios
 * Sem rastreadores
