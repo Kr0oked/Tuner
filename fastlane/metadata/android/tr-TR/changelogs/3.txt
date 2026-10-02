@@ -1,0 +1,3 @@
+* Ayarlanabilir referans perdesi (410–480 Hz, varsayılan 440 Hz), akort ekranından ve ayarlardan değiştirilebilir
+* İsteğe bağlı solfej notasyonu: C, D, E… yerine Do, Ré, Mi…
+* Geri gezinme ve ayarlar düğmesi için iyileştirilmiş ekran okuyucu desteği

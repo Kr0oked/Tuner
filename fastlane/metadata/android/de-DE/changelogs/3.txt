@@ -1,0 +1,3 @@
+* Einstellbarer Kammerton (410–480 Hz, Standard 440 Hz), anpassbar im Stimmgerät-Bildschirm und in den Einstellungen
+* Optionale Solfège-Notation: Do, Ré, Mi… statt C, D, E…
+* Verbesserte Screenreader-Unterstützung für die Zurück-Navigation und die Einstellungen-Schaltfläche

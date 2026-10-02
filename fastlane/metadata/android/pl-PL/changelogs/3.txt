@@ -1,0 +1,3 @@
+* Konfigurowalny strój kameralny (410–480 Hz, domyślnie 440 Hz), zmieniany na ekranie tunera i w ustawieniach
+* Opcjonalna notacja solmizacyjna: Do, Ré, Mi… zamiast C, D, E…
+* Lepsza obsługa czytników ekranu dla nawigacji wstecz i przycisku ustawień

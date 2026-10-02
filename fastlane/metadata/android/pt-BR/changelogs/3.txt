@@ -1,0 +1,3 @@
+* Tom de referência configurável (410–480 Hz, padrão 440 Hz), ajustável na tela do afinador e nas configurações
+* Notação de solfejo opcional: Do, Ré, Mi… em vez de C, D, E…
+* Melhor suporte a leitores de tela na navegação de volta e no botão de configurações

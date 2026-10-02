@@ -1,0 +1,3 @@
+* Configurable reference pitch (410–480 Hz, default 440 Hz), adjustable from the tuner screen and settings
+* Optional solfège notation: Do, Ré, Mi… instead of C, D, E…
+* Improved screen reader support for back navigation and the settings button

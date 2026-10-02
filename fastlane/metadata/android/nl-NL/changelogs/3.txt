@@ -1,0 +1,3 @@
+* Instelbare kamertoon (410–480 Hz, standaard 440 Hz), aan te passen vanuit het stemapparaatscherm en de instellingen
+* Optionele solfège-notatie: Do, Ré, Mi… in plaats van C, D, E…
+* Verbeterde schermlezerondersteuning voor terugnavigatie en de knop Instellingen

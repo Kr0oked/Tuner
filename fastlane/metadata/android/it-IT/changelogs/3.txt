@@ -1,0 +1,3 @@
+* Diapason configurabile (410–480 Hz, predefinito 440 Hz), regolabile dalla schermata dell'accordatore e dalle impostazioni
+* Notazione solfeggio opzionale: Do, Ré, Mi… invece di C, D, E…
+* Migliore supporto per gli screen reader nella navigazione indietro e nel pulsante delle impostazioni

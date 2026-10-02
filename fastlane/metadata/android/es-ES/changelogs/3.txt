@@ -1,0 +1,3 @@
+* Tono de referencia configurable (410–480 Hz, 440 Hz por defecto), ajustable desde la pantalla del afinador y los ajustes
+* Notación de solfeo opcional: Do, Ré, Mi… en lugar de C, D, E…
+* Mejor compatibilidad con lectores de pantalla para la navegación hacia atrás y el botón de ajustes

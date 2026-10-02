@@ -1,0 +1,3 @@
+* Diapason réglable (410–480 Hz, 440 Hz par défaut), depuis l'écran de l'accordeur et les paramètres
+* Notation en solfège optionnelle : Do, Ré, Mi… au lieu de C, D, E…
+* Meilleure prise en charge des lecteurs d'écran pour le retour en arrière et le bouton des paramètres
