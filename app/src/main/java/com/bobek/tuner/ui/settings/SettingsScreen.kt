@@ -27,17 +27,20 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeFlexibleTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -46,9 +49,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
@@ -58,6 +63,7 @@ import com.bobek.tuner.R
 import com.bobek.tuner.data.AppNightMode
 import com.bobek.tuner.ui.ComposeAppViewModel
 import com.bobek.tuner.ui.IAppViewModel
+import com.bobek.tuner.ui.NavigateBackButton
 import com.bobek.tuner.ui.tuner.ComposeTunerViewModel
 import com.bobek.tuner.ui.tuner.ITunerViewModel
 import com.bobek.tuner.ui.tuner.ReferencePitchDialog
@@ -81,18 +87,15 @@ fun SettingsScreen(
     var showNightModeDialog by rememberSaveable { mutableStateOf(false) }
     var showReferencePitchDialog by rememberSaveable { mutableStateOf(false) }
 
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
+            LargeFlexibleTopAppBar(
                 title = { Text(stringResource(R.string.settings)) },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_back),
-                            contentDescription = stringResource(R.string.navigate_back)
-                        )
-                    }
-                }
+                navigationIcon = { NavigateBackButton(onClick = onBackClick) },
+                scrollBehavior = scrollBehavior
             )
         }
     ) { padding ->
@@ -104,86 +107,68 @@ fun SettingsScreen(
         ) {
             SettingsSection(
                 title = stringResource(R.string.tuner),
-                icon = {
-                    Icon(painter = painterResource(R.drawable.ic_tuner), contentDescription = null)
-                }
+                iconResourceId = R.drawable.ic_tuner
             ) {
-                ListItem(
-                    supportingContent = { Text(stringResource(R.string.reference_pitch_value, referencePitch)) },
-                    modifier = Modifier.clickable { showReferencePitchDialog = true }
-                ) {
-                    Text(stringResource(R.string.reference_pitch))
-                }
+                ClickableSettingItem(
+                    title = stringResource(R.string.reference_pitch),
+                    summary = stringResource(R.string.reference_pitch_value, referencePitch),
+                    onClick = { showReferencePitchDialog = true }
+                )
 
-                ListItem(
-                    supportingContent = { Text(stringResource(R.string.solfege_notation_summary)) },
-                    trailingContent = {
-                        Switch(
-                            checked = solfegeNotation,
-                            onCheckedChange = { tunerViewModel.setSolfegeNotation(it) }
-                        )
-                    },
-                    modifier = Modifier.clickable { tunerViewModel.setSolfegeNotation(!solfegeNotation) }
-                ) {
-                    Text(stringResource(R.string.solfege_notation))
-                }
+                SwitchSettingItem(
+                    title = stringResource(R.string.solfege_notation),
+                    summary = stringResource(R.string.solfege_notation_summary),
+                    checked = solfegeNotation,
+                    onCheckedChange = tunerViewModel::setSolfegeNotation
+                )
             }
 
             HorizontalDivider()
             SettingsSection(
                 title = stringResource(R.string.display),
-                icon = {
-                    Icon(painter = painterResource(R.drawable.ic_display_settings), contentDescription = null)
-                }
+                iconResourceId = R.drawable.ic_display_settings
             ) {
-                ListItem(
-                    supportingContent = { Text(stringResource(nightMode.labelResourceId)) },
-                    modifier = Modifier.clickable { showNightModeDialog = true }
-                ) {
-                    Text(stringResource(R.string.night_mode))
-                }
+                ClickableSettingItem(
+                    title = stringResource(R.string.night_mode),
+                    summary = stringResource(nightMode.labelResourceId),
+                    onClick = { showNightModeDialog = true }
+                )
             }
 
             HorizontalDivider()
             SettingsSection(
                 title = stringResource(R.string.about),
-                icon = {
-                    Icon(painter = painterResource(R.drawable.ic_help), contentDescription = null)
-                }
+                iconResourceId = R.drawable.ic_help
             ) {
-                ListItem(
-                    supportingContent = { Text(stringResource(R.string.author_name)) },
-                    modifier = Modifier.clickable {
+                ClickableSettingItem(
+                    title = stringResource(R.string.author),
+                    summary = stringResource(R.string.author_name),
+                    onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, "mailto:philipp.bobek@mailbox.org".toUri())
                         context.startActivitySafely(intent)
                     }
-                ) {
-                    Text(stringResource(R.string.author))
-                }
+                )
 
-                ListItem(
-                    supportingContent = { Text(stringResource(R.string.license_name)) },
-                    modifier = Modifier.clickable { onLicenseClick() }
-                ) {
-                    Text(stringResource(R.string.license))
-                }
+                ClickableSettingItem(
+                    title = stringResource(R.string.license),
+                    summary = stringResource(R.string.license_name),
+                    onClick = onLicenseClick
+                )
 
-                ListItem(
-                    supportingContent = { Text(stringResource(R.string.third_party_licenses_summary)) },
-                    modifier = Modifier.clickable { onThirdPartyLicensesClick() }
-                ) {
-                    Text(stringResource(R.string.third_party_licenses))
-                }
+                ClickableSettingItem(
+                    title = stringResource(R.string.third_party_licenses),
+                    summary = stringResource(R.string.third_party_licenses_summary),
+                    onClick = onThirdPartyLicensesClick
+                )
 
-                ListItem(
-                    supportingContent = { Text(stringResource(R.string.source_code_name)) },
-                    modifier = Modifier.clickable {
+                ClickableSettingItem(
+                    title = stringResource(R.string.source_code),
+                    summary = stringResource(R.string.source_code_name),
+                    onClick = {
                         val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Kr0oked/Tuner".toUri())
                         context.startActivitySafely(intent)
                     }
-                ) {
-                    Text(stringResource(R.string.source_code))
-                }
+                )
 
                 ListItem(
                     supportingContent = { Text(BuildConfig.VERSION_NAME) }
@@ -216,24 +201,74 @@ fun SettingsScreen(
 @Composable
 private fun SettingsSection(
     title: String,
-    icon: @Composable () -> Unit,
+    iconResourceId: Int,
     content: @Composable () -> Unit
 ) {
     Row(
         modifier = Modifier.padding(start = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        icon()
+        Icon(painter = painterResource(iconResourceId), contentDescription = null)
         ListItem {
             Text(
                 text = title,
-                style = MaterialTheme.typography.labelLarge,
+                style = MaterialTheme.typography.labelLargeEmphasized,
                 color = MaterialTheme.colorScheme.primary,
             )
         }
     }
     Column(modifier = Modifier.padding(start = 40.dp)) {
         content()
+    }
+}
+
+@Composable
+private fun SwitchSettingItem(
+    title: String,
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    summary: String? = null
+) {
+    ListItem(
+        supportingContent = summary?.let { { Text(it) } },
+        trailingContent = {
+            Switch(
+                checked = checked,
+                onCheckedChange = null,
+                thumbContent = if (checked) {
+                    {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_check),
+                            contentDescription = null,
+                            modifier = Modifier.size(SwitchDefaults.IconSize)
+                        )
+                    }
+                } else {
+                    null
+                }
+            )
+        },
+        modifier = Modifier.toggleable(
+            value = checked,
+            role = Role.Switch,
+            onValueChange = onCheckedChange
+        )
+    ) {
+        Text(title)
+    }
+}
+
+@Composable
+private fun ClickableSettingItem(
+    title: String,
+    summary: String,
+    onClick: () -> Unit
+) {
+    ListItem(
+        supportingContent = { Text(summary) },
+        modifier = Modifier.clickable(onClick = onClick)
+    ) {
+        Text(title)
     }
 }
 

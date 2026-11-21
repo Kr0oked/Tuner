@@ -38,10 +38,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PlainTooltip
@@ -84,7 +87,7 @@ import kotlin.math.abs
 
 @Composable
 @PreviewScreenSizes
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 fun TunerScreen(
     @PreviewParameter(TunerScreenViewModelProvider::class) viewModel: ITunerViewModel,
     onSettingsClick: () -> Unit = {}
@@ -120,7 +123,10 @@ fun TunerScreen(
                         tooltip = { PlainTooltip { Text(settingsLabel) } },
                         state = rememberTooltipState()
                     ) {
-                        IconButton(onClick = onSettingsClick) {
+                        IconButton(
+                            onClick = onSettingsClick,
+                            shapes = IconButtonDefaults.shapes()
+                        ) {
                             Icon(
                                 painter = painterResource(R.drawable.ic_settings),
                                 contentDescription = settingsLabel
@@ -217,7 +223,8 @@ private fun ReferencePitchButton(
 ) {
     OutlinedButton(
         onClick = onClick,
-        modifier = modifier
+        modifier = modifier,
+        shapes = ButtonDefaults.shapes()
     ) {
         Text(stringResource(R.string.reference_pitch_display, referencePitch))
     }
@@ -257,7 +264,7 @@ private fun MeterContent(cents: Int?, modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text("−50¢", style = MaterialTheme.typography.labelSmall)
-            Text("0¢", style = MaterialTheme.typography.labelSmall)
+            Text("0¢", style = MaterialTheme.typography.labelSmallEmphasized)
             Text("+50¢", style = MaterialTheme.typography.labelSmall)
         }
     }
@@ -280,13 +287,17 @@ private fun IdleContent(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = if (compact) 12.dp else 24.dp)
         )
-        Button(onClick = onGrantPermission) {
+        Button(
+            onClick = onGrantPermission,
+            shapes = ButtonDefaults.shapes()
+        ) {
             Text(stringResource(R.string.tuner_grant_permission))
         }
     }
 }
 
 @Composable
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 private fun ListeningContent(
     note: DetectedNote?,
     solfegeNotation: Boolean,
@@ -309,7 +320,7 @@ private fun ListeningContent(
                 color = noteColor
             )
         } else {
-            CircularProgressIndicator(modifier = Modifier.size(if (compact) 48.dp else 72.dp))
+            LoadingIndicator(modifier = Modifier.size(if (compact) 48.dp else 72.dp))
         }
 
         if (note == null) {
@@ -328,7 +339,7 @@ private fun ListeningContent(
             )
             Text(
                 text = centsLabel(note.cents),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMediumEmphasized,
                 color = noteColor.copy(alpha = 0.8f),
                 modifier = Modifier.padding(top = 4.dp)
             )

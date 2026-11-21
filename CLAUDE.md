@@ -70,7 +70,15 @@ What belongs where, rather than an inventory; a class is named only when it carr
   two test fakes (`AppViewModelTest`, `TunerViewModelTest`).
 - **`licenses/`**: `LicenseRepository` reads the app and third-party license texts from `res/raw`.
 - **`ui/`**: Compose code, one subpackage per screen (`tuner/`, `settings/`, `licenses/`) plus `theme/`.
-  `MainContent` hosts navigation.
+  `MainContent` hosts navigation. Follows Material 3 Expressive: secondary screens use a collapsing flexible top app
+  bar (`LargeFlexibleTopAppBar` / `MediumFlexibleTopAppBar` with `exitUntilCollapsedScrollBehavior`) and plain
+  `ListItem`s, not `SegmentedListItem`; the shared `NavigateBackButton` lives in `AppBars.kt`. Buttons pass
+  `shapes = ...Defaults.shapes()`; the listening state shows a `LoadingIndicator`. Single-choice options use the
+  selectable `ListItem(selected, onClick)` with a leading `RadioButton(onClick = null)`, not hand-rolled
+  `selectable` rows. `*Emphasized` type styles mark focal text only (section headers, selected option, current values,
+  the 0¢ target); the note name keeps its custom bold size, which is already heavier. The `CentsBarMeter` keeps its
+  no-bounce spring so the needle doesn't overshoot the measured cents. Navigation transitions in `MainContent` take
+  their specs from `MaterialTheme.motionScheme`. The XML themes inherit from `Theme.Material3Expressive.*`.
 
 ### Data Flow
 
@@ -81,7 +89,8 @@ Settings changes are debounced 1 second before being written to DataStore.
 
 ## Tech Stack
 
-- **UI:** Jetpack Compose + Material3, Navigation Compose
+- **UI:** Jetpack Compose + Material 3 Expressive (`MaterialExpressiveTheme`, `MotionScheme.expressive()`),
+  Navigation Compose
 - **DI:** Hilt + KSP
 - **Persistence:** DataStore Preferences
 - **Audio:** Android `AudioRecord` (PCM FLOAT, 44.1kHz), YIN pitch detection

@@ -21,8 +21,10 @@ package com.bobek.tuner.ui.tuner
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Label
 import androidx.compose.material3.MaterialTheme
@@ -42,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.bobek.tuner.R
 import com.bobek.tuner.domain.DEFAULT_REFERENCE_PITCH
@@ -51,6 +54,11 @@ import kotlinx.coroutines.flow.drop
 import kotlin.math.roundToInt
 
 private const val REFERENCE_PITCH_STEPS = MAX_REFERENCE_PITCH - MIN_REFERENCE_PITCH - 1
+
+// Material 3 Expressive "medium" slider size
+private val SLIDER_TRACK_HEIGHT = 40.dp
+private val SLIDER_TRACK_CORNER_SIZE = 12.dp
+private val SLIDER_THUMB_SIZE = DpSize(width = 4.dp, height = 52.dp)
 
 @Composable
 @Preview
@@ -95,8 +103,19 @@ fun ReferencePitchDialog(
                             },
                             interactionSource = interactionSource
                         ) {
-                            SliderDefaults.Thumb(interactionSource = interactionSource)
+                            SliderDefaults.Thumb(
+                                interactionSource = interactionSource,
+                                isVertical = false,
+                                thumbSize = SLIDER_THUMB_SIZE
+                            )
                         }
+                    },
+                    track = { state ->
+                        SliderDefaults.Track(
+                            sliderState = state,
+                            trackCornerSize = SLIDER_TRACK_CORNER_SIZE,
+                            modifier = Modifier.height(SLIDER_TRACK_HEIGHT)
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -104,7 +123,7 @@ fun ReferencePitchDialog(
                 )
                 Text(
                     text = stringResource(R.string.reference_pitch_value, referencePitch),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.titleLargeEmphasized,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
@@ -113,12 +132,18 @@ fun ReferencePitchDialog(
             }
         },
         dismissButton = {
-            TextButton(onClick = { viewModel.setReferencePitch(DEFAULT_REFERENCE_PITCH) }) {
+            TextButton(
+                onClick = { viewModel.setReferencePitch(DEFAULT_REFERENCE_PITCH) },
+                shapes = ButtonDefaults.shapes()
+            ) {
                 Text(stringResource(R.string.reset_to_default))
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismiss) {
+            TextButton(
+                onClick = onDismiss,
+                shapes = ButtonDefaults.shapes()
+            ) {
                 Text(stringResource(android.R.string.ok))
             }
         }
