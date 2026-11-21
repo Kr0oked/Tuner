@@ -40,7 +40,7 @@ java {
 android {
     namespace = "com.bobek.tuner"
     compileSdk {
-        version = release(37)
+        version = release(37) { minorApiLevel = 2 }
     }
 
     defaultConfig {
