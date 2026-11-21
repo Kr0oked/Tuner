@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -67,7 +66,6 @@ private const val TAG = "SettingsScreen"
 
 @Composable
 @PreviewScreenSizes
-@OptIn(ExperimentalMaterial3Api::class)
 fun SettingsScreen(
     viewModel: IAppViewModel = ComposeAppViewModel(),
     tunerViewModel: ITunerViewModel = ComposeTunerViewModel(),
@@ -111,13 +109,13 @@ fun SettingsScreen(
                 }
             ) {
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.reference_pitch)) },
                     supportingContent = { Text(stringResource(R.string.reference_pitch_value, referencePitch)) },
                     modifier = Modifier.clickable { showReferencePitchDialog = true }
-                )
+                ) {
+                    Text(stringResource(R.string.reference_pitch))
+                }
 
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.solfege_notation)) },
                     supportingContent = { Text(stringResource(R.string.solfege_notation_summary)) },
                     trailingContent = {
                         Switch(
@@ -126,7 +124,9 @@ fun SettingsScreen(
                         )
                     },
                     modifier = Modifier.clickable { tunerViewModel.setSolfegeNotation(!solfegeNotation) }
-                )
+                ) {
+                    Text(stringResource(R.string.solfege_notation))
+                }
             }
 
             HorizontalDivider()
@@ -137,10 +137,11 @@ fun SettingsScreen(
                 }
             ) {
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.night_mode)) },
                     supportingContent = { Text(stringResource(nightMode.labelResourceId)) },
                     modifier = Modifier.clickable { showNightModeDialog = true }
-                )
+                ) {
+                    Text(stringResource(R.string.night_mode))
+                }
             }
 
             HorizontalDivider()
@@ -151,39 +152,44 @@ fun SettingsScreen(
                 }
             ) {
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.author)) },
                     supportingContent = { Text(stringResource(R.string.author_name)) },
                     modifier = Modifier.clickable {
                         val intent = Intent(Intent.ACTION_VIEW, "mailto:philipp.bobek@mailbox.org".toUri())
                         context.startActivitySafely(intent)
                     }
-                )
+                ) {
+                    Text(stringResource(R.string.author))
+                }
 
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.license)) },
                     supportingContent = { Text(stringResource(R.string.license_name)) },
                     modifier = Modifier.clickable { onLicenseClick() }
-                )
+                ) {
+                    Text(stringResource(R.string.license))
+                }
 
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.third_party_licenses)) },
                     supportingContent = { Text(stringResource(R.string.third_party_licenses_summary)) },
                     modifier = Modifier.clickable { onThirdPartyLicensesClick() }
-                )
+                ) {
+                    Text(stringResource(R.string.third_party_licenses))
+                }
 
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.source_code)) },
                     supportingContent = { Text(stringResource(R.string.source_code_name)) },
                     modifier = Modifier.clickable {
                         val intent = Intent(Intent.ACTION_VIEW, "https://github.com/Kr0oked/Tuner".toUri())
                         context.startActivitySafely(intent)
                     }
-                )
+                ) {
+                    Text(stringResource(R.string.source_code))
+                }
 
                 ListItem(
-                    headlineContent = { Text(stringResource(R.string.version)) },
                     supportingContent = { Text(BuildConfig.VERSION_NAME) }
-                )
+                ) {
+                    Text(stringResource(R.string.version))
+                }
             }
         }
     }
@@ -218,15 +224,13 @@ private fun SettingsSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         icon()
-        ListItem(
-            headlineContent = {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-        )
+        ListItem {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
     }
     Column(modifier = Modifier.padding(start = 40.dp)) {
         content()

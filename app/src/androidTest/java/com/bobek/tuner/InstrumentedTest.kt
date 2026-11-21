@@ -20,7 +20,6 @@ package com.bobek.tuner
 
 import android.Manifest.permission.RECORD_AUDIO
 import androidx.annotation.StringRes
-import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasScrollToNodeAction
@@ -42,7 +41,6 @@ import org.junit.runner.RunWith
 
 @LargeTest
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalTestApi::class)
 class InstrumentedTest {
 
     // Granted before the activity launches, so every run starts in the same state regardless of earlier grants
