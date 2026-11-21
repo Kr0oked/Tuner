@@ -65,7 +65,7 @@ fun ReferencePitchDialog(
         SliderState(
             value = referencePitch.toFloat(),
             steps = REFERENCE_PITCH_STEPS,
-            valueRange = MIN_REFERENCE_PITCH.toFloat()..MAX_REFERENCE_PITCH.toFloat()
+            trackRange = MIN_REFERENCE_PITCH.toFloat()..MAX_REFERENCE_PITCH.toFloat()
         )
     }
 
@@ -86,6 +86,7 @@ fun ReferencePitchDialog(
             Column {
                 Slider(
                     state = sliderState,
+                    onValueChange = { sliderState.value = it },
                     interactionSource = interactionSource,
                     thumb = { state ->
                         Label(
