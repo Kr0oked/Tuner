@@ -1,0 +1,2 @@
+* Überarbeitetes Design auf Basis von Material 3 Expressive
+* Beim Zuhören ersetzt ein Mikrofonsymbol, das auf Geräusche reagiert, die Ladeanimation

@@ -1,0 +1,2 @@
+* Odświeżony wygląd oparty na Material 3 Expressive
+* Podczas nasłuchiwania animację ładowania zastępuje ikona mikrofonu reagująca na dźwięk

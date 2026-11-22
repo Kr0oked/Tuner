@@ -1,0 +1,2 @@
+* Refreshed design based on Material 3 Expressive
+* While listening, a microphone icon that reacts to sound replaces the loading animation

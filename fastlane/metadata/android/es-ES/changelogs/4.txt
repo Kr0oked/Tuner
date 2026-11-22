@@ -1,0 +1,2 @@
+* Diseño renovado basado en Material 3 Expressive
+* Mientras escucha, un icono de micrófono que reacciona al sonido sustituye a la animación de carga

@@ -1,0 +1,2 @@
+* Material 3 Expressive tabanlı yenilenmiş tasarım
+* Dinleme sırasında yükleme animasyonunun yerini sese tepki veren bir mikrofon simgesi alıyor

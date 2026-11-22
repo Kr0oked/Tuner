@@ -1,0 +1,2 @@
+* Visual renovado baseado no Material 3 Expressive
+* Durante a escuta, um ícone de microfone que reage ao som substitui a animação de carregamento
