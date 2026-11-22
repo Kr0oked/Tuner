@@ -39,6 +39,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import kotlin.math.pow
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -218,6 +219,46 @@ class OnsetDetectorTest {
         val detector = OnsetDetector(energyRatio = 2.5f, minRms = 0.01f)
         detector.isOnset(silence())
         assertFalse(detector.isOnset(tone(amplitude = 0.005f)))
+    }
+
+    @Test
+    fun precomputedRmsBehavesLikeBuffer() {
+        val detector = OnsetDetector(energyRatio = 2.5f, minRms = 0.01f)
+        detector.isOnset(rootMeanSquare(silence()))
+        assertTrue(detector.isOnset(rootMeanSquare(tone(amplitude = 0.5f))))
+    }
+}
+
+class InputLevelTest {
+
+    private fun dbfsToRms(dbfs: Float) = 10f.pow(dbfs / 20f)
+
+    @Test
+    fun rootMeanSquareOfConstantSignalIsItsAmplitude() {
+        assertEquals(0.5f, rootMeanSquare(FloatArray(8) { 0.5f }), 1e-6f)
+    }
+
+    @Test
+    fun silenceIsZero() {
+        assertEquals(0f, inputLevel(0f))
+    }
+
+    @Test
+    fun levelAtOrBelowFloorIsZero() {
+        assertEquals(0f, inputLevel(dbfsToRms(INPUT_LEVEL_MIN_DBFS)), 1e-4f)
+        assertEquals(0f, inputLevel(dbfsToRms(INPUT_LEVEL_MIN_DBFS - 20f)))
+    }
+
+    @Test
+    fun levelAtOrAboveCeilingIsOne() {
+        assertEquals(1f, inputLevel(dbfsToRms(INPUT_LEVEL_MAX_DBFS)), 1e-4f)
+        assertEquals(1f, inputLevel(1f))
+    }
+
+    @Test
+    fun levelScalesLinearlyInDecibels() {
+        val midpoint = (INPUT_LEVEL_MIN_DBFS + INPUT_LEVEL_MAX_DBFS) / 2f
+        assertEquals(0.5f, inputLevel(dbfsToRms(midpoint)), 1e-4f)
     }
 }
 

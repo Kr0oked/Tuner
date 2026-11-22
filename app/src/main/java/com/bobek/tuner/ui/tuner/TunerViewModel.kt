@@ -42,12 +42,15 @@ import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlin.math.log10
 import kotlin.math.sqrt
 import kotlin.time.Duration.Companion.seconds
 
 sealed class TunerState {
     object Idle : TunerState()
-    data class Listening(val note: DetectedNote?) : TunerState()
+
+    /** [inputLevel] is the current microphone loudness, normalized to 0..1 on a dBFS scale. */
+    data class Listening(val note: DetectedNote?, val inputLevel: Float = 0f) : TunerState()
 }
 
 interface ITunerViewModel {
@@ -71,6 +74,8 @@ internal const val FREQUENCY_SMOOTHING_ALPHA = 0.7f
 internal const val NOTE_CONFIRMATION_FRAMES = 3
 internal const val ONSET_ENERGY_RATIO = 2.5f
 internal const val ONSET_MIN_RMS = 0.01f
+internal const val INPUT_LEVEL_MIN_DBFS = -60f
+internal const val INPUT_LEVEL_MAX_DBFS = -10f
 
 private val SETTINGS_DEBOUNCE = 1.seconds
 
@@ -140,11 +145,19 @@ class TunerViewModel @Inject constructor(
         try {
             while (currentCoroutineContext().isActive) {
                 val read = record.read(buffer, 0, ANALYSIS_SIZE, AudioRecord.READ_BLOCKING)
-                if (read > 0 && !onsetDetector.isOnset(buffer)) {
-                    val frequency = PitchDetector.detect(buffer, SAMPLE_RATE)
-                    val note = smoothing.process(frequency)
-                        ?.let { DetectedNote.fromFrequency(it, referencePitchFlow.value.toDouble()) }
-                    tunerStateFlow.value = TunerState.Listening(gate.process(note))
+                if (read > 0) {
+                    val rms = rootMeanSquare(buffer)
+                    val level = inputLevel(rms)
+                    tunerStateFlow.value = if (onsetDetector.isOnset(rms)) {
+                        // Skip pitch detection on the attack transient but keep the level live.
+                        val previousNote = (tunerStateFlow.value as? TunerState.Listening)?.note
+                        TunerState.Listening(previousNote, level)
+                    } else {
+                        val frequency = PitchDetector.detect(buffer, SAMPLE_RATE)
+                        val note = smoothing.process(frequency)
+                            ?.let { DetectedNote.fromFrequency(it, referencePitchFlow.value.toDouble()) }
+                        TunerState.Listening(gate.process(note), level)
+                    }
                 }
             }
         } finally {
@@ -216,18 +229,30 @@ internal class OnsetDetector(private val energyRatio: Float, private val minRms:
     private var previousRms = 0f
 
     /** Returns true if [buffer] is significantly louder than the previous call's buffer. */
-    fun isOnset(buffer: FloatArray): Boolean {
-        val rms = rootMeanSquare(buffer)
+    fun isOnset(buffer: FloatArray): Boolean = isOnset(rootMeanSquare(buffer))
+
+    /** Like [isOnset], for a buffer whose RMS the caller has already computed. */
+    fun isOnset(rms: Float): Boolean {
         val onset = rms > minRms && rms > previousRms * energyRatio
         previousRms = rms
         return onset
     }
+}
 
-    private fun rootMeanSquare(buffer: FloatArray): Float {
-        var sumOfSquares = 0f
-        for (sample in buffer) sumOfSquares += sample * sample
-        return sqrt(sumOfSquares / buffer.size)
-    }
+internal fun rootMeanSquare(buffer: FloatArray): Float {
+    var sumOfSquares = 0f
+    for (sample in buffer) sumOfSquares += sample * sample
+    return sqrt(sumOfSquares / buffer.size)
+}
+
+/**
+ * Maps an RMS amplitude to a 0..1 loudness level on a logarithmic (dBFS) scale, so the UI can show
+ * that the microphone is live even for sounds too quiet or noisy to yield a note.
+ */
+internal fun inputLevel(rms: Float): Float {
+    if (rms <= 0f) return 0f
+    val dbfs = 20f * log10(rms)
+    return ((dbfs - INPUT_LEVEL_MIN_DBFS) / (INPUT_LEVEL_MAX_DBFS - INPUT_LEVEL_MIN_DBFS)).coerceIn(0f, 1f)
 }
 
 internal class FrequencySmoothing(private val alpha: Float) {

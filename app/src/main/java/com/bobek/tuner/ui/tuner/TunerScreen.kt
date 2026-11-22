@@ -44,7 +44,6 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PlainTooltip
@@ -64,6 +63,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -72,6 +73,7 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -241,6 +243,7 @@ private fun NoteContent(
         is TunerState.Idle -> IdleContent(onGrantPermission = onGrantPermission, compact = compact)
         is TunerState.Listening -> ListeningContent(
             note = state.note,
+            inputLevel = state.inputLevel,
             solfegeNotation = solfegeNotation,
             compact = compact
         )
@@ -300,6 +303,7 @@ private fun IdleContent(
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
 private fun ListeningContent(
     note: DetectedNote?,
+    inputLevel: Float,
     solfegeNotation: Boolean,
     modifier: Modifier = Modifier,
     compact: Boolean = false
@@ -311,16 +315,31 @@ private fun ListeningContent(
     ) {
         val noteColor = note?.let { centsColor(it.cents) }
             ?: MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+        val noteFontSize = if (compact) 56.sp else 96.sp
 
         if (note != null) {
             Text(
                 text = "${note.displayName(solfegeNotation)}${note.octave}",
-                fontSize = if (compact) 56.sp else 96.sp,
+                fontSize = noteFontSize,
                 fontWeight = FontWeight.Bold,
                 color = noteColor
             )
         } else {
-            LoadingIndicator(modifier = Modifier.size(if (compact) 48.dp else 72.dp))
+            Box(contentAlignment = Alignment.Center) {
+                // Invisible stand-in so the slot keeps the note's height and nothing jumps once a note appears.
+                Text(
+                    text = "A4",
+                    fontSize = noteFontSize,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .alpha(0f)
+                        .clearAndSetSemantics {}
+                )
+                InputLevelIndicator(
+                    level = inputLevel,
+                    modifier = Modifier.size(if (compact) 40.dp else 72.dp)
+                )
+            }
         }
 
         if (note == null) {
@@ -344,6 +363,42 @@ private fun ListeningContent(
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
+    }
+}
+
+private const val INPUT_LEVEL_HALO_GROWTH = 0.5f
+
+/**
+ * A mic icon with a halo that grows with the microphone's loudness: still when it's quiet, moving
+ * only in response to sound, so it reads as "ready and listening" rather than "loading".
+ */
+@Composable
+private fun InputLevelIndicator(level: Float, modifier: Modifier = Modifier) {
+    val animatedLevel by animateFloatAsState(
+        targetValue = level,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessMedium),
+        label = "inputLevel"
+    )
+    val haloColor = MaterialTheme.colorScheme.primary
+    val containerColor = MaterialTheme.colorScheme.secondaryContainer
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.drawBehind {
+            val radius = size.minDimension / 2f
+            drawCircle(
+                color = haloColor.copy(alpha = 0.25f * animatedLevel),
+                radius = radius * (1f + INPUT_LEVEL_HALO_GROWTH * animatedLevel)
+            )
+            drawCircle(color = containerColor, radius = radius)
+        }
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_mic),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+            modifier = Modifier.fillMaxSize(0.5f)
+        )
     }
 }
 
@@ -445,6 +500,7 @@ private class TunerScreenViewModelProvider : PreviewParameterProvider<ITunerView
     override val values: Sequence<ITunerViewModel> = sequenceOf(
         ComposeTunerViewModel(TunerState.Idle),
         ComposeTunerViewModel(TunerState.Listening(null)),
+        ComposeTunerViewModel(TunerState.Listening(null, inputLevel = 0.7f)),
         ComposeTunerViewModel(
             TunerState.Listening(
                 DetectedNote(name = "A", octave = 4, frequency = 440.0f, cents = 0)
@@ -465,9 +521,10 @@ private class TunerScreenViewModelProvider : PreviewParameterProvider<ITunerView
     override fun getDisplayName(index: Int): String? = when (index) {
         0 -> "Idle"
         1 -> "Listening - No Note"
-        2 -> "Listening - In Tune"
-        3 -> "Listening - Slightly Sharp"
-        4 -> "Listening - Significantly Flat"
+        2 -> "Listening - Sound Without Note"
+        3 -> "Listening - In Tune"
+        4 -> "Listening - Slightly Sharp"
+        5 -> "Listening - Significantly Flat"
         else -> null
     }
 }
